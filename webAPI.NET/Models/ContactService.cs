@@ -11,17 +11,31 @@
         {
 
         }
+        
         public void Delete(string id)
         {
+            _contacts.Remove(_contacts.Find(x => x.Id == id));
         }
 
         public void Edit(string id, Contact newContact)
         {
+            Contact contact = _contacts.Find(x => x.Id == id);
+            contact.Name = newContact.Name; 
+            contact.Server = newContact.Server;
+            contact.LastDate = newContact.LastDate;
+            contact.Last = newContact.Last;
         }
 
-        public Contact Get(int id)
+        public void Add(Contact newContact)
         {
-            return _contacts[0];
+            _contacts.Add
+                (newContact);   
+        }
+
+        public Contact Get(string id)
+        {
+            Contact contact = _contacts.Find(x => x.Id == id);
+            return contact;
         }
 
         public List<Contact> GetAll()
