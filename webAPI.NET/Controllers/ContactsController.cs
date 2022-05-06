@@ -21,34 +21,45 @@ namespace webAPI.Controllers
         {
             if (contactService.GetAll() == null)
             {
-                return StatusCode(404, "Page Not Found");
+                return StatusCode(404, "No Contacts Exist");
             }
             return Ok(contactService.GetAll());
         }
 
         // GET api/<ContactController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            Contact contact = contactService.Get(id);
+            if (contact == null)
+            {
+                return StatusCode(404, "Contact Not Found");
+            }
+            return Ok(contact);
         }
+
+
+
 
         // POST api/<ContactController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Contact newContact)
         {
+            contactService.Add(newContact);
         }
 
         // PUT api/<ContactController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(string id, [FromBody] Contact newContact)
         {
+            contactService.Edit(id, newContact);
         }
 
         // DELETE api/<ContactController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(string id)
         {
+            contactService.Delete(id);
         }
     }
 }
