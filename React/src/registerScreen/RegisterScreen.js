@@ -13,6 +13,7 @@ function RegisterScreen(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log(localStorage.getItem('user-info'));
         var userName = document.getElementById('username').value;
         var nickName = document.getElementById('nick-name').value;
         var password = document.getElementById('exampleInputPassword2').value;

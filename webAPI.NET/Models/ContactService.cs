@@ -4,8 +4,8 @@
     {
         private static List<Contact> _contacts = new List<Contact>()
         {
-            new Contact("adi", "adi aviv", "localhost:5000", "hello" , DateTime.Now),
-            new Contact("guy", "guy aviv", "localhost:5000", "by by" , DateTime.Now)
+            new Contact("adi", "adi aviv", "localhost:5000", "hello" , DateTime.Now, "adi123456789"),
+            new Contact("guy", "guy ben razon", "localhost:5000", "by by" , DateTime.Now, "guy123456789")
         };
         public ContactService()
         {
@@ -21,9 +21,12 @@
         {
             Contact contact = _contacts.Find(x => x.Id == id);
             contact.Name = newContact.Name; 
+            contact.Password = newContact.Password;
             contact.Server = newContact.Server;
             contact.LastDate = newContact.LastDate;
             contact.Last = newContact.Last;
+            contact.Messages = newContact.Messages;
+            contact.Contacts = newContact.Contacts;
         }
 
         public void Add(Contact newContact)
