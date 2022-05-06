@@ -7,11 +7,10 @@ namespace webAPI.NET.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private readonly IMessageService messageService;
+        private static readonly IMessageService messageService = new MessageService();
 
         public MessageController()
         {
-            messageService = new MessageService();
         }
 
 

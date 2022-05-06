@@ -9,10 +9,9 @@ namespace webAPI.Controllers
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        private readonly IContactService contactService;
+        private static readonly IContactService contactService = new ContactService();
         public ContactsController()
         {
-            contactService = new ContactService();
         }
 
         // GET: api/<ContactController>
@@ -43,16 +42,16 @@ namespace webAPI.Controllers
 
         // POST api/<ContactController>
         [HttpPost]
-        public void Post([FromBody] Contact newContact)
+        public void Post([FromBody] string newContact)
         {
             contactService.Add(newContact);
         }
 
         // PUT api/<ContactController>/5
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody] Contact newContact)
+        public void Put(string id, string name)
         {
-            contactService.Edit(id, newContact);
+            contactService.Edit(id, name);
         }
 
         // DELETE api/<ContactController>/5

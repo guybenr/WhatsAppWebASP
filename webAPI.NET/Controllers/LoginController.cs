@@ -15,11 +15,12 @@ namespace webAPI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult userLogin([FromBody] LoginInfo loginInfo)
         {
-            var user = contactService.GetAll().Where(x => x.Id.Equals(loginInfo.Username) && x.Password.Equals(loginInfo.Password)).FirstOrDefault();
+            Contact user = contactService.GetAll().Where(x => x.Id.Equals(loginInfo.Username) && x.Password.Equals(loginInfo.Password)).FirstOrDefault();
             if (user == null)
             {
                 return Ok(new Response ("Invalid","Invalid User." ));
             }
+            contactService.setContact(user);
             return Ok(new Response ("Success","Login Successfully" ));
         }
     }
