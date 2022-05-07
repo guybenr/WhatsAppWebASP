@@ -1,0 +1,24 @@
+﻿body {
+    font-family: Arial;
+    margin: 0 auto; /* Center website */
+    padding: 20px;
+    background-image: url("unnamed.jpg");
+    background-size: cover;
+}
+
+.heading {
+    font-size: 20px;
+}
+
+.general {
+    font-family: Arial;
+    font-size: 25px;
+    word-break: break-word;
+}
+
+.averageIcon {
+    position: relative;
+    max-block-size: 20px;
+    padding-left: 0.5px;
+}
+

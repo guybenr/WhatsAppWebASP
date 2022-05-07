@@ -1,0 +1,31 @@
+﻿@model Review
+
+<link rel="stylesheet" href="~/css/StyleSheetDetails.css">
+
+<ul>
+    <br />
+    <li class="heading">
+        Name:
+        <div class="general">@Model.Name</div>
+    </li>
+    <br />
+    <li class="heading">
+        Description:
+        <div class="general">@Model.Description</div>
+    </li>
+    <br />
+    <li class="heading row-cols-auto">
+        Grade:
+        <div class="col general">
+            @Model.Grade
+            @for (int i = 0; i < @Model.Grade; ++i)
+                {
+                    <img class="col, averageIcon" src=~/css/R.png />
+                }
+        </div>
+
+    </li>
+
+
+
+</ul>
