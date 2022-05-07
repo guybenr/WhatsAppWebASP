@@ -10,7 +10,7 @@
             Server = server;    
             Last = last;    
             LastDate = lastDate; 
-            Contacts = new List<Contact>();
+            Contacts = new List<String>();
             Messages = new List<Message>();
         }
         public string Id { get; set; }
@@ -24,7 +24,7 @@
 
         public DateTime LastDate { get; set; }
 
-        public List<Contact> Contacts { get; set; }
+        public List<String> Contacts { get; set; }
 
         public List<Message> Messages { get; set; }
     }

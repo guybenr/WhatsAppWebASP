@@ -2,21 +2,6 @@
 {
     public class MessageService : IMessageService
     {
-        private static Dictionary<string, List<Message>> _messages2 = new Dictionary<string, List<Message>>()
-        {
-            {"adi", new List<Message>() {
-                                        new Message(1, "guy" ,"hey", DateTime.Now, "true"),
-                                        new Message(2, "guy" ,"hey adi, what's app?", DateTime.Now, "false"),
-                                        new Message(3, "guy" ,"good", DateTime.Now, "true")
-                                        }
-            },
-            {"guy", new List<Message>() {
-                                         new Message(2, "adi" ,"hey adi, what's app?", DateTime.Now, "true"),
-                                         new Message(4, "or" ,"hey or", DateTime.Now, "true")
-                                        }
-            }
-        };
-
         private static Dictionary<string, List<KeyValuePair<string, List<Message>>>> _messages = new Dictionary<string, List<KeyValuePair<string, List<Message>>>>();
 
 
@@ -24,14 +9,14 @@
         {
             _messages["adi"] = new List<KeyValuePair<string, List<Message>>>();
             List<Message> messages1 = new List<Message>() {
-                                        new Message(1, "guy" ,"hey", DateTime.Now, "true"),
-                                        new Message(2, "guy" ,"hey adi, what's app?", DateTime.Now, "false"),
-                                        new Message(3, "guy" ,"good", DateTime.Now, "true")
+                                        new Message(1 ,"hey", DateTime.Now, "true"),
+                                        new Message(2 ,"hey adi, what's app?", DateTime.Now, "false"),
+                                        new Message(3 ,"good", DateTime.Now, "true")
                                         };
             List<Message> messages2 = new List<Message>() {
-                                        new Message(1, "or" ,"hey or", DateTime.Now, "true"),
-                                        new Message(2, "or" ,"hey adi, what's app?", DateTime.Now, "false"),
-                                        new Message(3, "or" ,"good", DateTime.Now, "true")
+                                        new Message(1 ,"hey or", DateTime.Now, "true"),
+                                        new Message(2 ,"hey adi, what's app?", DateTime.Now, "false"),
+                                        new Message(3 ,"good", DateTime.Now, "true")
                                         };
             // adding elements
             _messages["adi"].Add(new KeyValuePair<string, List<Message>>("guy", messages1));
@@ -49,49 +34,64 @@
             return null;
         }
 
-        public void Edit(int id, string contact, Message newMessage)
+        public bool Edit(int id, string contact, string newMessage)
         {
             Message message = Get(id, contact);
             if (message != null)
             {
-                message.Sent = newMessage.Sent;
-                message.Created = newMessage.Created;
-                message.Contact = newMessage.Contact;
+                message.Content = newMessage;
+                message.Created = DateTime.Now;
+                return true;
             }
+            return false;
         }
 
-        public void Delete(int id, string contact)
+        public bool Delete(int id, string contact)
         {
             if (Get(id, contact) != null)
             {
                 IContactService contactService = new ContactService();
                 Contact curContact = contactService.getCurContact();
                 _messages[curContact.Id].Find(x=>x.Key == contact).Value.Remove(Get(id, contact));
+                return true;
             }
+            return false;
         }
 
-        public void Add(string contact, Message newMessage)
+        public bool Add(string contact, Message newMessage)
         {
             IContactService contactService = new ContactService();
             Contact curContact = contactService.getCurContact();
             if (_messages[curContact.Id].Find(x=>x.Key == contact).Key == null)
             {
-                contactService.addNewContact(contact);
-                _messages[curContact.Id] = new List<KeyValuePair<string, List<Message>>>();
-                List<Message> list = new List<Message>() { newMessage };
-                _messages[curContact.Id].Add(new KeyValuePair<string, List<Message>>(contact, list));
+                if (contactService.addNewContact(contact))
+                {
+                    _messages[curContact.Id] = new List<KeyValuePair<string, List<Message>>>();
+                    List<Message> list = new List<Message>() { newMessage };
+                    _messages[curContact.Id].Add(new KeyValuePair<string, List<Message>>(contact, list));
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
                 List<Message> list = GetAll(contact);
-                list.Add(newMessage);
+                if (list != null)
+                {
+                    list.Add(newMessage);
+                    return true;
+                }
+                return false;
             }
         }
 
         public Message Get(int id, string contact)
         {
             List <Message> messagesCur = GetAll(contact);
-            if (messagesCur.Find(x=>x.Contact == contact) != null)
+            if (messagesCur != null)
             {
                 return (messagesCur.Find(x => x.Id == id));
             }

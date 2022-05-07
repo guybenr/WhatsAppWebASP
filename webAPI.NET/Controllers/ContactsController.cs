@@ -37,28 +37,37 @@ namespace webAPI.Controllers
             return Ok(contact);
         }
 
-
-
-
         // POST api/<ContactController>
         [HttpPost]
-        public void Post([FromBody] string newContact)
+        public IActionResult Post([FromBody] string newContact)
         {
-            contactService.Add(newContact);
+            if (!contactService.Add(newContact))
+            {
+                return StatusCode(404, "Can't Add this Contect");
+            }
+            return Ok();
         }
 
         // PUT api/<ContactController>/5
         [HttpPut("{id}")]
-        public void Put(string id, string name)
+        public IActionResult Put(string id, string name)
         {
-            contactService.Edit(id, name);
+            if (!contactService.Edit(id, name))
+            {
+                return StatusCode(404, "Contact Not Found");
+            }
+            return Ok();
         }
 
         // DELETE api/<ContactController>/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public IActionResult Delete(string id)
         {
-            contactService.Delete(id);
+            if (!contactService.Delete(id))
+            {
+                return StatusCode(404, "Contact Not Found");
+            }
+            return Ok();
         }
     }
 }

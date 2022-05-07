@@ -13,12 +13,6 @@ namespace webAPI.NET.Controllers
         {
         }
 
-
-
-
-
-
-
         // GET: api/<ContactController>
         [HttpGet("{id}/[controller]")]
         public IActionResult Get(string id)
@@ -44,23 +38,35 @@ namespace webAPI.NET.Controllers
 
         // POST api/<ContactController>
         [HttpPost("{id}/[controller]")]
-        public void Post(string id, Message message)
+        public IActionResult Post(string id, Message message)
         {
-            messageService.Add(id,message);
+            if (!messageService.Add(id,message))
+            {
+                return StatusCode(404, "Contact Not Found");
+            }
+            return Ok();
         }
 
         // PUT api/<ContactController>/5
         [HttpPut("{id}/[controller]/{id2}")]
-        public void Put(string id, int id2, Message message)
+        public IActionResult Put(string id, int id2, string newContent)
         {
-            messageService.Edit(id2, id, message);
+            if (!messageService.Edit(id2, id, newContent))
+            {
+                return StatusCode(404, "Message Not Found");
+            }
+            return Ok();
         }
 
         // DELETE api/<ContactController>/5
         [HttpDelete("{id2}")]
-        public void Delete(string id, int id2)
+        public IActionResult Delete(string id, int id2)
         {
-            messageService.Delete(id2, id);
+            if (!messageService.Delete(id2, id))
+            {
+                return StatusCode(404, "Message Not Found");
+            }
+            return Ok();
         }
     }
 }

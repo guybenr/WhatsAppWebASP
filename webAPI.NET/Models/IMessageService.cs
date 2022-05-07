@@ -5,10 +5,11 @@
         public List<Message> GetAll(string id);
         Message Get(int id, string contact);
 
-        public void Edit(int id, string contact , Message newMessage);
+        public bool Edit(int id, string contact , string newMessage);
 
-        public void Delete(int id, string contact);
+        public bool Delete(int id, string contact);
 
-        public void Add(string contact, Message newMessage);
+        public bool Add(string contact, Message newMessage);
+
     }
 }
