@@ -11,7 +11,7 @@
 	<img class="iconStar" src=~/css/R.png />
 	<span class="heading">User Rating</span>
 	<p class="underHeading">Average Reating</p>
-	<hr style="border:3px solid #f1f1f1">
+	<hr style="border:3px #f1f1f1">
 
 	<div class="row">
 		<div class="side"></div>
@@ -96,8 +96,8 @@
 				<li>
 					<div class="container">
 						<div class="row">
-							<div class="col-4 nameReview">
-								<a asp-action="Details" asp-route-id="@review.Id">@review.Name</a>
+							<div class="col-4 detailsReview">
+								<a asp-action="Details" asp-route-id="@review.Id" class="nameReview">@review.Name</a>
 								<i class="gradeReview">@review.Grade</i>
 								<p class="timeReview">07.05.22 17:05</p>
 							</div>
@@ -106,10 +106,10 @@
 							</div>
 							<div class="col"></div>
 							<div class="col">
-								<a asp-action="Edit" asp-rout-id="@review.Id" class="editReview">Edit </a>
+								<a asp-action="Edit" asp-route-id="@review.Id" class="editReview">Edit </a>
 							</div>
 							<div class="col">
-								<a asp-action="Delete" asp-rout-id="@review.Id" class="deleteReview">Delete</a>
+								<a asp-action="Delete" asp-route-id="@review.Id" class="deleteReview">Delete</a>
 							</div>
 						</div>
 					</div>
@@ -118,7 +118,7 @@
 			}
 		</ul>
 		<div class="addReview">
-			<button class="ButtonaddReview">Click here to add new review</button>
+			<a asp-action="Create" class="ButtonaddReview">Click here to add new review</a>
 		</div>
 	</div>
 </div>

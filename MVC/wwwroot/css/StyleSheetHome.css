@@ -127,9 +127,8 @@ body {
 
 .reviews {
     position: relative;
-    top: 80px;
-    font-size: 35px;
-    text-decoration: underline;
+    top: 120px;
+    font-size: 50px;
     font-weight: 100;
     font-family: Arial, sans-serif;
     text-shadow: 2px 1px #aaaaaa;
@@ -144,19 +143,23 @@ body {
 
 .listReviews {
     position: relative;
-    bottom: 120px;
+    bottom: 60px;
     left: 30px;
 }
 
-.nameReview {
+.detailsReview {
     font-size: 25px;
     font-weight: bold;
     
 }
 
+.nameReview {
+    color: #000000;
+}
+
 
 .timeReview {
-    font-size: 10px;
+    font-size: 12px;
     color: #828282;
 }
 
@@ -177,7 +180,7 @@ body {
 .addReview {
     font-size: 18px;
     position:relative;
-    bottom: 100px;
+    bottom: 50px;
     left: 40%;
     font-family: Arial;
 }

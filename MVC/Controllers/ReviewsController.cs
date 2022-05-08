@@ -5,13 +5,15 @@ namespace MVC.Controllers
 {
     public class ReviewsController : Controller
     {
-        private static List<Review> reviews;
+        private static List<Review> reviews = new List<Review>();
 
         public ReviewsController()
         {
-            reviews = new List<Review>();
+            if (reviews.Count == 0)
+            {
                 reviews.Add(new Review() { Id = 1, Name = "Adi Aviv", Description = "aaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, aaaaaaaaaaaaaaaaa. aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", Grade = 5 });
                 reviews.Add(new Review() { Id = 2, Name = "Guy Ben Razon", Description = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb bbbbbbbbbbbbbbbbbbbbbbbbbbb , bbbbbbbbbbbbbbbbbbbbbbbbbbb . bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", Grade = 4 });
+            }
         }
         public IActionResult Index()
         {
@@ -28,5 +30,22 @@ namespace MVC.Controllers
             return StatusCode(404, "Review Not Found");
             
         }
+
+        public IActionResult Create()
+        {
+            return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult Create(string name, string description, int grade)
+        {
+            int nextId = reviews.Max(x => x.Id);
+            reviews.Add(new Review() {Id = nextId + 1 , Name = name, Description = description, Grade = grade });
+            return Redirect("Index");
+
+        }
+
+
     }
 }
