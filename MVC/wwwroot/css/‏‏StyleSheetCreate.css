@@ -1,9 +1,27 @@
-﻿
-.add {
+﻿body {
+    font-family: Arial;
+    margin: 0 auto; /* Center website */
+    padding: 20px;
     background-image: url("unnamed.jpg");
     background-size: cover;
 }
 
-.name {
-    font-size: larger;
+.heading {
+    padding-top:30px;
+    font-family: Arial;
+    font-weight: bolder;
+    color: #3e3e3e;
+    text-shadow: 3px 1px #8b8b8b;
+    font-size: 55px;
+}
+
+.add {
+    position: relative;
+    font-size: 25px;
+    padding-top: 30px;
+
+}
+
+.details {
+    text-shadow: 1px 1px #8b8b8b
 }

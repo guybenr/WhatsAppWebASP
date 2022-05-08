@@ -2,6 +2,37 @@
 
 <link rel="stylesheet" href="~/css/StyleSheetDetails.css">
 
-<div>
-    <hr />Are you sure you want to delete this review?
-</div>
+<ul>
+    <br />
+    <li class="heading">
+        Name:
+        <div class="general">@Model.Name</div>
+    </li>
+    <br />
+    <li class="heading">
+        Description:
+        <div class="general">@Model.Description</div>
+    </li>
+    <br />
+    <li class="heading row-cols-auto">
+        Grade:
+        <div class="col general">
+            @Model.Grade
+            @for (int i = 0; i < @Model.Grade; ++i)
+            {
+                <img class="col, averageIcon" src=~/css/R.png />
+            }
+        </div>
+
+    </li>
+</ul>
+
+<form asp-action="Delete">
+    <div class="add">
+        <label class="details">
+            Are you shure you want to delete this review?:
+        </label>
+        <input type="submit" value="Delete" class="delete"/>
+    </div>
+</form>
+

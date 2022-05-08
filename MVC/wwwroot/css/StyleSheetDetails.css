@@ -24,3 +24,16 @@
     bottom: 3px;
 }
 
+.details {
+    position:relative;
+    text-shadow: 1px 1px #8b8b8b;
+    font-size: 30px;
+    top: 40px;
+}
+
+.delete {
+    position: relative;
+    font-size: 20px;
+    left: 10px;
+    top: 40px;
+}

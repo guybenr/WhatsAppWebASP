@@ -179,15 +179,30 @@ body {
 
 .addReview {
     font-size: 18px;
-    position:relative;
+    position: relative;
     bottom: 50px;
     left: 40%;
+    width: 20%;
     font-family: Arial;
+    border-radius: 5px;
+    box-shadow: #686868;
 }
 
 .ButtonaddReview {
-    background-color:#cdcdcd;
-    width: 13%;
     border-radius: 5px;
-    border-color: #aaaaaa;
+    color: #000000;
+}
+
+.searchBox {
+    position: relative;
+    width: 12%;
+    font-size: 20px;
+    top: 60px;
+}
+
+.search {
+    position: relative;
+    color: #686868;
+    background-color:ActiveBorder;
+    border: none;
 }
