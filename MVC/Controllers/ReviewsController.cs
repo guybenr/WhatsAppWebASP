@@ -7,6 +7,7 @@ namespace MVC.Controllers
     {
         private static List<Review> reviews = new List<Review>();
         private static float average = 0;
+        private static int temp = 0;
         public ReviewsController()
         {
 
@@ -56,6 +57,7 @@ namespace MVC.Controllers
         public IActionResult Edit(int id)
         {
             Review review = reviews.Find(x => x.Id == id);
+            temp = review.Grade;
             return View(review);
 
         }
@@ -67,6 +69,10 @@ namespace MVC.Controllers
             review.Name = name;
             review.Description = description;
             review.Grade = grade;
+            average = average * reviews.Count;
+            average -= temp;
+            average += review.Grade;
+            average = average / (reviews.Count);
             return RedirectToAction(nameof(Index));
         }
 
@@ -75,15 +81,17 @@ namespace MVC.Controllers
         {
             Review review = reviews.Find(x => x.Id == id);
             return View(review);
-
         }
 
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteReal(int id)
         {
+            average = average * reviews.Count;
             Review review = reviews.Find(x => x.Id == id);
+            average -= review.Grade;
             reviews.Remove(review);
+            average = average / (reviews.Count);
             return RedirectToAction(nameof(Index));
         }
 
@@ -99,7 +107,8 @@ namespace MVC.Controllers
                     searchReviews.Add(review);
                 }
             }
-            return View("Index", searchReviews);
+            Data data = new Data() { Average=average, Reviews = searchReviews};
+            return View("Index", data);
 
         }
 
