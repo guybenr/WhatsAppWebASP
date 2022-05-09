@@ -1,31 +1,29 @@
-﻿namespace webAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace webAPI.Models
 {
     public class Contact
     {
-        public Contact(string id, string name, string server, string last, DateTime lastDate, string password)
+        public Contact(string id, string name, string server, string last, DateTime lastDate)
         {
             Id = id;    
-            Password = password;
             Name = name;    
             Server = server;    
             Last = last;    
             LastDate = lastDate; 
-            Contacts = new List<String>();
-            Messages = new List<Message>();
         }
+        [Key]
+        [Required]
         public string Id { get; set; }
-
-        public string Password { get; set; }
+        [Required]
         public string Name { get; set; }
-
+        [Required]
         public string Server { get; set; }
-
+        [Required]
         public string Last { get; set; }
-
+        [Required]
         public DateTime LastDate { get; set; }
 
-        public List<String> Contacts { get; set; }
 
-        public List<Message> Messages { get; set; }
     }
 }

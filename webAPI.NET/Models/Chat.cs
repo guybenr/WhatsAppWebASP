@@ -1,6 +1,17 @@
-﻿namespace webAPI.NET.Models
+﻿namespace webAPI.Models
 {
     public class Chat
     {
+        public Chat(string user1, string user2)
+        {
+            User1 = user1;
+            User2 = user2;
+        }
+
+        public string User1 { get; set; }
+        [Required]
+        public string User2 { get; set; }
+
+        List<Message> Messages { get; set; }
     }
 }
