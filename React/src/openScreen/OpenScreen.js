@@ -15,7 +15,6 @@ function OpenScreen(props) {
         setIsInvalid(true);
     }
 
-    let x = "http://localhost:5000/api/login";
     const handleSubmit = async (event) => {
         event.preventDefault();
         var username = document.getElementById('username').value;
@@ -25,17 +24,20 @@ function OpenScreen(props) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                "Acceot":"application/jason"
+                "Accept":"application/json"
             },
             body: JSON.stringify(loginDetails)
         });
         result = await result.json();
-        localStorage.setItem('user-info', JSON.stringify(result));
-        
+        if(result === "Invalid username or password") {
+            handleShow();
+            return;
+        }
+        localStorage.setItem('user-token', JSON.stringify(result)); //authentication token
         console.log(result);
-        //props.onSignIn(username);
-        //navigate('/Chat');
-        //handleShow();
+        props.onSignIn(username);
+        navigate('/Chat');
+        
     }
 
 

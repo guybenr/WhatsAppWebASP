@@ -62,17 +62,6 @@ function RegisterScreen(props) {
             setBodyMassage("The password confirmation does not match.");
             return;
         }
-        let isUserTaken = false;
-        UsersData.usersList.forEach(element => { // check if the username is being used by someone else
-            if (userName === element.userName) {
-                isUserTaken = true;
-            }
-        });
-        if (isUserTaken) {
-            setShowError(true);
-            setBodyMassage("The username is already taken, please choose another username.");
-            return;
-        }
         // adds the user to the users database
         UsersData.usersList.push({
             userName: userName,

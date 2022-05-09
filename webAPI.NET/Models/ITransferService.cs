@@ -13,7 +13,7 @@
                 return false;
             }
             IMessageService messageService = new MessageService();
-            messageService.Add(from, )
+            messageService.Add(from, new Message(10, "HELLO", DateTime.Now, "true"));
             return true;
         }
     }
