@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorModal from "../errorModal/ErrorModal";
 import UsersData from "../usersData/UsersData";
@@ -17,6 +17,16 @@ function ChatScreen(props) {
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
 
+    useEffect(async () => {
+        let result = await fetch("http://localhost:5028/api/contacts", {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("user-token")
+            },
+            body: ""
+        });
+        setContacts(await result.json());
+    })
 
     const contactName = React.createRef('');
 

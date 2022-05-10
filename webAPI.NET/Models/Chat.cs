@@ -6,6 +6,7 @@
         {
             User1 = user1;
             User2 = user2;
+            M
         }
 
         public string User1 { get; set; }
