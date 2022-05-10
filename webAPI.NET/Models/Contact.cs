@@ -4,10 +4,10 @@ namespace webAPI.Models
 {
     public class Contact
     {
-        public Contact(string id, string name, string server, string last, DateTime lastDate, string userId)
+        public Contact(string name, string userName, string server, string last, DateTime lastDate, string userId)
         {
-            Id = id;    
-            Name = name;    
+            Name = name;
+            UserName = userName;    
             Server = server;    
             Last = last;    
             LastDate = lastDate; 
@@ -15,18 +15,18 @@ namespace webAPI.Models
         }
         [Key]
         [Required]
-        public string Id { get; set; }
-        [Required]
         public string Name { get; set; }
+
+        [Required]
+        public string UserName { get; set; }
         [Required]
         public string Server { get; set; }
         [Required]
         public string Last { get; set; }
         [Required]
         public DateTime LastDate { get; set; }
-
+        [Required]
         public string UserId { get; set; }
-
 
     }
 }

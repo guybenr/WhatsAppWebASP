@@ -9,7 +9,7 @@ namespace webAPI.Models
             Id = id;
             User1 = user1;
             User2 = user2;
-            M
+            Messages = new List<Message>();
         }
 
 
@@ -20,5 +20,9 @@ namespace webAPI.Models
         public string User1 { get; set; }
         [Required]
         public string User2 { get; set; }
+
+        public List<Message> Messages { get; set; }
+
+        
     }
 }

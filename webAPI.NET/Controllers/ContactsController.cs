@@ -7,116 +7,94 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Models;
 using webAPI.NET.Data;
+using webAPI.NET.Services;
 
 namespace webAPI.NET.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/contacts")]
     [ApiController]
     public class ContactsController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly IContactService _service;
+        
 
-        public ContactsController(Context context)
+
+        public ContactsController(IContactService service)
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/Contacts
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Contact>>> GetContact()
-        {
-            return await _context.Contact.ToListAsync();
-        }
 
-        // GET: api/Contacts/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Contact>> GetContact(string id)
-        {
-            var contact = await _context.Contact.FindAsync(id);
 
-            if (contact == null)
-            {
-                return NotFound();
-            }
+		// GET: api/Contacts
+		[HttpGet]
+		public async Task<IEnumerable<Contact>> GetContact()
+		{
+			return await _service.GetAll();
+		}
 
-            return contact;
-        }
 
-        // PUT: api/Contacts/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutContact(string id, Contact contact)
-        {
-            if (id != contact.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(contact).State = EntityState.Modified;
+		// GET: api/Contacts/5
+		[HttpGet("{id}")]
+		public async Task<Contact> GetContact(string id)
+		{
+			var contact = await _service.Get(id);
+			if (contact == null)
+			{
+				return null;
+			}
+			return contact;
+		}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ContactExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
-            return NoContent();
-        }
 
-        // POST: api/Contacts
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Contact>> PostContact(Contact contact)
-        {
-            _context.Contact.Add(contact);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (ContactExists(contact.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+		// PUT: api/Contacts/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutContact(string id, string name, string server)
+		{
+			var isUpdate = await _service.Put(id, name, server);
+			if (!isUpdate)
+			{
+				return BadRequest();
+			}
+			return NoContent();
+		}
 
-            return CreatedAtAction("GetContact", new { id = contact.Id }, contact);
-        }
 
-        // DELETE: api/Contacts/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteContact(string id)
-        {
-            var contact = await _context.Contact.FindAsync(id);
-            if (contact == null)
-            {
-                return NotFound();
-            }
 
-            _context.Contact.Remove(contact);
-            await _context.SaveChangesAsync();
+		// POST: api/Contacts
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<IActionResult> PostContact(string id, string name, string server)
+		{
+			var isAdd = await _service.Post(id, name, server);
+			if (!isAdd)
+			{
+				return Conflict();
+			}
+			return NoContent();
 
-            return NoContent();
-        }
 
-        private bool ContactExists(string id)
-        {
-            return _context.Contact.Any(e => e.Id == id);
-        }
-    }
+		}
+
+
+
+		// DELETE: api/Contacts/5
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteContact(string id)
+		{
+			var isDelete = await _service.Delete(id);
+			if (!isDelete)
+			{
+				return NotFound();
+			}
+			return NoContent();
+		}
+
+
+
+
+	}
 }
