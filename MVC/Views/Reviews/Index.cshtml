@@ -9,81 +9,81 @@
 
 
 <div>
-	<img class="iconStar" src=~/css/R.png />
-	<span class="heading">User Rating</span>
-	<p class="underHeading">Average Reating</p>
-	<hr style="border:3px #f1f1f1">
+    <img class="iconStar" src=~/css/R.png />
+    <span class="heading">User Rating</span>
+    <p class="underHeading">Average Reating</p>
+    <hr style="border:3px #f1f1f1">
 
-	<div class="row">
-		<div class="side"></div>
-		<div class="middle">
-			<div class="bar-container">
-				<div class="bar-5"></div>
-			</div>
-		</div>
-		<div class="side right container">
-			<div class="row row-cols-auto">
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-			</div>
-		</div>
-		<div class="side"></div>
-		<div class="middle">
-			<div class="bar-container">
-				<div class="bar-4"></div>
-			</div>
-		</div>
-		<div class="side right container">
-			<div class="row row-cols-auto">
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-			</div>
-		</div>
-		<div class="side"></div>
-		<div class="middle">
-			<div class="bar-container">
-				<div class="bar-3"></div>
-			</div>
-		</div>
-		<div class="side right container">
-			<div class="row row-cols-auto">
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-			</div>
-		</div>
-		<div class="side"></div>
-		<div class="middle">
-			<div class="bar-container">
-				<div class="bar-2"></div>
-			</div>
-		</div>
-		<div class="side right container">
-			<div class="row row-cols-auto">
-				<img class="col, ratingStar" src=~/css/R.png />
-				<img class="col, ratingStar" src=~/css/R.png />
-			</div>
-		</div>
-		<div class="side"></div>
-		<div class="middle">
-			<div class="bar-container">
-				<div class="bar-1"></div>
-			</div>
-		</div>
-		<div class="side right container">
-			<div class="row row-cols-auto">
-				<img class="col, ratingStar" src=~/css/R.png />
-			</div>
-		</div>
-		<div class="average">
-			@String.Format("{0:0.##}", Model.Average)
-			<div class="row row-cols-auto">
-				<img class="col, averageIcon" src=~/css/R.png />
+    <div class="row">
+        <div class="side"></div>
+        <div class="middle">
+            <div class="bar-container">
+                <div class="bar-5"></div>
+            </div>
+        </div>
+        <div class="side right container">
+            <div class="row row-cols-auto">
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+            </div>
+        </div>
+        <div class="side"></div>
+        <div class="middle">
+            <div class="bar-container">
+                <div class="bar-4"></div>
+            </div>
+        </div>
+        <div class="side right container">
+            <div class="row row-cols-auto">
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+            </div>
+        </div>
+        <div class="side"></div>
+        <div class="middle">
+            <div class="bar-container">
+                <div class="bar-3"></div>
+            </div>
+        </div>
+        <div class="side right container">
+            <div class="row row-cols-auto">
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+            </div>
+        </div>
+        <div class="side"></div>
+        <div class="middle">
+            <div class="bar-container">
+                <div class="bar-2"></div>
+            </div>
+        </div>
+        <div class="side right container">
+            <div class="row row-cols-auto">
+                <img class="col, ratingStar" src=~/css/R.png />
+                <img class="col, ratingStar" src=~/css/R.png />
+            </div>
+        </div>
+        <div class="side"></div>
+        <div class="middle">
+            <div class="bar-container">
+                <div class="bar-1"></div>
+            </div>
+        </div>
+        <div class="side right container">
+            <div class="row row-cols-auto">
+                <img class="col, ratingStar" src=~/css/R.png />
+            </div>
+        </div>
+        <div class="average">
+            @String.Format("{0:0.##}", Model.Average)
+            <div class="row row-cols-auto">
+                <img class="col, averageIcon" src=~/css/R.png />
                 <img class="col, averageIcon" src=~/css/R.png />
                 <img class="col, averageIcon" src=~/css/R.png />
                 <img class="col, averageIcon" src=~/css/R.png />
@@ -92,43 +92,49 @@
             <span class="reviews">
                 Reviews
             </span>
-			 <form asp-action="Search">
-                    <input type="text" placeholder="Search.." name="input" class="searchBox">
-                    <i type="submit" class="searchBox"><button class="fa fa-search search"></button></i>
-                </form>
+            <form asp-action="Search">
+                <input pattern="[a-zA-Z]+" type="text" placeholder="Search by name.." name="input" class="searchBox" id="search" title="Please enter on alphabets only, without spaces.">
+                <i type="submit" class="searchBox"><button class="fa fa-search search"></button></i>
+            </form>
+            @section Scripts {
+            <script src="~/js/search.js"></script>
+            }
         </div>
         <ul class="listReviews">
-			@foreach (Review review in Model.Reviews)
-			{
-				<li>
-					<div class="container">
-						<div class="row">
-							<div class="col-4 detailsReview">
-								<a asp-action="Details" asp-route-id="@review.Id" class="nameReview">@review.Name</a>
-								<i class="gradeReview">@review.Grade</i>
-								<p class="timeReview">@review.dateTime</p>
-							</div>
-							<div class="col-6 dataReview">
-								@review.Description
-							</div>
-							<div class="col"></div>
-							<div class="col">
-								<a asp-action="Edit" asp-route-id="@review.Id" class="editReview">Edit </a>
-							</div>
-							<div class="col">
-								<a asp-action="Delete" asp-route-id="@review.Id" class="deleteReview">Delete</a>
-							</div>
-						</div>
-					</div>
-				</li>
-				<div class="seperateReview"></div>
-			}
-		</ul>
-		<div class="addReview">
-			<a asp-action="Create" class="ButtonaddReview">Click here to add new review</a>
-		</div>
-	</div>
+                @foreach (Review review in Model.Reviews)
+                {
+                    <li>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-4 detailsReview">
+                                    <a asp-action="Details" asp-route-id="@review.Id" class="nameReview">@review.Name</a>
+                                    <i class="gradeReview">@review.Grade</i>
+                                    <p class="timeReview">@review.dateTime</p>
+                                </div>
+                                <div class="col-6 dataReview">
+                                    @review.Description
+                                </div>
+                                <div class="col"></div>
+                                <div class="col">
+                                    <a asp-action="Edit" asp-route-id="@review.Id" class="editReview">Edit </a>
+                                </div>
+                                <div class="col">
+                                    <a asp-action="Delete" asp-route-id="@review.Id" class="deleteReview">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <div class="seperateReview"></div>
+                }
+            </ul>
+        <div class="addReview">
+            <a asp-action="Create" class="ButtonaddReview">Click here to add new review</a>
+        </div>
+    </div>
 </div>
+
+
+
 
 
 
