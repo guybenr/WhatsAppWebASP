@@ -9,6 +9,7 @@ namespace webAPI.Models
             Id = id;
             User1 = user1;
             User2 = user2;
+            M
         }
 
 
