@@ -9,10 +9,12 @@ namespace webAPI.NET.Services
 	{
 		private readonly Context _context;
 		private static User _user = new User("Adi Aviv", "Adi1", "123456789", "image");
+		private readonly IChatService _chatService;
 
 		public ContactService (Context context)
 		{
 			_context = context;
+			_chatService = new ChatService(context);
 		}
 
 
@@ -52,6 +54,10 @@ namespace webAPI.NET.Services
 				{
 					throw;
 				}
+			}
+			if (!await _chatService.PostChat(_user.Id, id))
+			{
+				return false;
 			}
 
 			return true;

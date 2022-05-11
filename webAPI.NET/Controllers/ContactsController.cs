@@ -17,8 +17,6 @@ namespace webAPI.NET.Controllers
     {
         private readonly IContactService _service;
         
-
-
         public ContactsController(IContactService service)
         {
             _service = service;
