@@ -40,28 +40,45 @@ function ChatScreen(props) {
     }
 
     // function adding the contact to the database
-    const addContact = (event) => {
+    const addContact = async (event) => {
         event.preventDefault();
-        if (contactName.current.value === '') { // validation that the input isnt empty
+        if (contactUsername.current.value === '' || contactNickName.current.value === '' || contactServer.current.value === '') { // validation that the input isnt empty
             return;
         }
         let userName = props.userLoginDetails;
-        // adding the contact to the database and check if the contact exist
-        if (UsersData.usersChat.has(contactName.current.value) && !UsersData.usersChat.get(userName).some(e => e.nameContact === contactName.current.value) && !(contactName.current.value === userName)) {
-            contacts.push(
-                { nameContact: contactName.current.value, massages: [{ massage: "", isRecived: true, time: new Date(), type: "" }] }
-            );
-            setToAddContact(false);
-            //if there is no such username in the database
-        } else if (!UsersData.usersChat.has(contactName.current.value)) {
-            alert("Contact Identifier Doesn't Exist");
-            //if the contact try add himself
-        } else if (contactName.current.value === userName) {
+            //if the contact try to add himself
+        if (contactUsername.current.value === userName && contactServer.current.value === "localhost:5028") {
             alert("Contact can't add himself");
-            //if the contact already being added
-        } else {
-            alert("Contact Already Exist");
+            return;
+        } else if (contacts.find( c => c.id === contactUsername.current.value && c.server === contactServer.current.value) !== undefined) {
+            alert("Contact already added");
+            return;
         }
+        let transfer = {from: userName, to: contactUsername.current.value, server: contactServer.current.value };
+        let result = await fetch("http://"+ transfer.server + "/api/invitations/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(transfer)
+        });
+        if(result.status !== 201) {
+            alert("Invalid Details");
+            return;
+        }
+        result = await fetch("http://localhost:5028/api/invitations/", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(transfer)
+        });
+        contactUsername.current.value = "";
+        contactNickName.current.value = "";
+        contactServer.current.value = "";
+        setToAddContact(false);
     }
 
     const doSearch = (query) => {
@@ -117,10 +134,10 @@ function ChatScreen(props) {
                     </Modal.Header>
 
                     <Modal.Body>
-                        <form action>
+                        <form>
                             <input className="form-control me-2 add-contact" type="search" placeholder="Username" aria-label="Search" ref={contactName}></input>
-                            <input className="form-control me-2 add-contact" type="search" placeholder="Nick Name" aria-label="Search" ref={contactName}></input>
-                            <input className="form-control me-2 add-contact" type="search" placeholder="Server" aria-label="Search" ref={contactName}></input>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Nick Name" aria-label="Search" ref={contactNickName}></input>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Server" aria-label="Search" ref={contactServer}></input>
                         </form>
                     </Modal.Body>
 
