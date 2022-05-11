@@ -6,6 +6,10 @@ body {
   background-size: cover; /* Resize the background image to cover the entire container */
 }
 
+.add-contact{
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
 .mb-3 {
   padding-left: 30px;
 }

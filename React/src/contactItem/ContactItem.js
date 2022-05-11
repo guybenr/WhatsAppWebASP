@@ -28,7 +28,7 @@ function ContactItem(props) {
 
     return (
         <ul className="list-group users-list">
-            <button type="button" className="list-group-item list-group-item-action" onClick={() => {props.setDetails(props.contactName)}}>
+            <button type="button" className="list-group-item list-group-item-action" onClick={() => {props.setDetails(props.contactDetails)}}>
                 <div className="sideBar-body">
                     <div className="avatar-icon">
                         <img src={ImageChat}></img>

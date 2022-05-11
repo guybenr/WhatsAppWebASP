@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import Massage from "../massage/Massage";
 import React from "react";
 import { Modal } from "react-bootstrap";
@@ -11,6 +11,7 @@ function Chat(props) {
     let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
     const [records, setRecord] = React.useState(false);
     const [hadRecorded, setHadRecorded] = React.useState(false);
+    const [messages, setMessages] = React.useState([]);
     const toSendMassage = React.createRef('');
     var massageContent = "";
     var massageType = "";
@@ -20,10 +21,20 @@ function Chat(props) {
         setRecord(true);
     }
 
+    useEffect(async () => {
+        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contactId + "/messages/", {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("user-token")
+            },
+        });
+        setMessages(await messages.json());
+    });
+
     //function returns all of the Massage Components that are in the database
-    const massagesList = props.massages.map((massage, key) => {
-        if (massage.massage !== "")
-            return <Massage content={massage.massage} isRecived={massage.isRecived} time={massage.time} type={massage.type}/>
+    const massagesList = messages.map((message, key) => {
+        if (message.content !== "")
+            return <Massage content={message.content} isRecived={!message.sent} time={message.created} type={"text"}/>
         return <></>
     });
 
@@ -48,11 +59,31 @@ function Chat(props) {
     }
 
     //function handeling sending massage to a contact
-    const handlePressingKey = (event) => {
-        if (event.key !== "Enter" || toSendMassage.current.value === "")
+    const handlePressingKey = async (event) => {
+        let messageContent = toSendMassage.current.value;
+        if (event.key !== "Enter" || messageContent === "")
             return;
         event.preventDefault();
-        sendText();
+        let message = {from: props.currentUserId, to: props.contact.id, content: messageContent}
+        await fetch("http://localhost:5028/api/transfer", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Accept": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("user-token")
+            },
+            body: JSON.stringify(message)
+        });
+        await fetch("http://"+ props.contact.server + "/api/transfer", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Accept": "application/json",
+                "Authorization": "Bearer " + localStorage.getItem("user-token")
+            },
+            body: JSON.stringify(message)
+        });
+        props.reRender(!props.reRender);
     }
 
     //function sending an image massage

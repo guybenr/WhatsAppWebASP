@@ -10,6 +10,9 @@ import ContactListResult from "../contactsListResult/ContactListResult";
 
 function ChatScreen(props) {
     const navigate = useNavigate();
+    const contactUsername = React.createRef('');
+    const contactNickName = React.createRef('');
+    const contactServer = React.createRef('');
 
     const [toAddContact, setToAddContact] = React.useState(false);
     const [contacts, setContacts] = React.useState(UsersData.usersChat.get(props.userLoginDetails));
@@ -17,16 +20,16 @@ function ChatScreen(props) {
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
 
-    useEffect(async () => {
-        let result = await fetch("http://localhost:5028/api/contacts", {
-            method: 'GET',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("user-token")
-            },
-            body: ""
-        });
-        setContacts(await result.json());
-    })
+    // useEffect(async () => {
+    //     let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
+    //         method: 'GET',
+    //         headers: {
+    //             "Authorization": "Bearer " + localStorage.getItem("user-token")
+    //         },
+    //         body: ""
+    //     });
+    //     setContacts(await contactsResponse.json());
+    // });
 
     const contactName = React.createRef('');
 
@@ -62,7 +65,7 @@ function ChatScreen(props) {
     }
 
     const doSearch = (query) => {
-        setContacts(UsersData.usersChat.get(props.userLoginDetails).filter((contact) => contact.nameContact.includes(query)));
+        setContacts(contacts.filter((contact) => contact.name.includes(query)));
     }
 
 
@@ -106,15 +109,19 @@ function ChatScreen(props) {
                     <Search setSearchQuery={doSearch} />
                     <ContactListResult contactsList={contacts} showChat={showOpenChat} setDetails={setDetailsChat} />
                 </div>
-                {(detailsChat !== "") && <Chat chatName={detailsChat} setReRender={setReRender} reRender={reRender}
-                    massages={UsersData.usersChat.get(props.userLoginDetails).find(element => element.nameContact === detailsChat).massages} />}
+                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails} contact={detailsChat} 
+                                            chatName={detailsChat.name} setReRender={setReRender} reRender={reRender} />}
                 <Modal show={toAddContact} onHide={() => setToAddContact(false)}>
                     <Modal.Header closeButton>
                         <Modal.Title>Add new contact</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Body>
-                        <input className="form-control me-2" type="search" placeholder="Contact's Identifier" aria-label="Search" ref={contactName}></input>
+                        <form action>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Username" aria-label="Search" ref={contactName}></input>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Nick Name" aria-label="Search" ref={contactName}></input>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Server" aria-label="Search" ref={contactName}></input>
+                        </form>
                     </Modal.Body>
 
                     <Modal.Footer>
