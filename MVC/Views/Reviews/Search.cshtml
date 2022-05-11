@@ -1,0 +1,32 @@
+﻿@model Data
+
+<!-- Add icon library -->
+<link rel="stylesheet" href="~/css/StyleSheetHome.css">
+
+
+
+@foreach (Review review in Model.Reviews)
+{
+                        <li>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-4 detailsReview">
+                                        <a asp-action="Details" asp-route-id="@review.Id" class="nameReview">@review.Name</a>
+                                        <i class="gradeReview">@review.Grade</i>
+                                        <p class="timeReview">@review.dateTime</p>
+                                    </div>
+                                    <div class="col-6 dataReview">
+                    @review.Description
+                                    </div>
+                                    <div class="col"></div>
+                                    <div class="col">
+                                        <a asp-action="Edit" asp-route-id="@review.Id" class="editReview">Edit </a>
+                                    </div>
+                                    <div class="col">
+                                        <a asp-action="Delete" asp-route-id="@review.Id" class="deleteReview">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <div class="seperateReview"></div>
+}

@@ -18,6 +18,12 @@ namespace MVC.Controllers
             return View(data);
         }
 
+        public IActionResult Index2()
+        {
+            Data data = new Data() { Average = average, Reviews = reviews };
+            return View(data);
+        }
+
         public IActionResult Details(int id)
         {
             Review review = reviews.Find(x => x.Id == id);
@@ -95,21 +101,25 @@ namespace MVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
         public IActionResult Search(string input)
         {
             List<Review> searchReviews = new List<Review>();
-            foreach (Review review in reviews)
+            if (input == null)
             {
-                if (review.Name.StartsWith(input))
+                searchReviews = reviews;
+            }
+            else
+            {
+                foreach (Review review in reviews)
                 {
-                    searchReviews.Add(review);
+                    if (review.Name.StartsWith(input))
+                    {
+                        searchReviews.Add(review);
+                    }
                 }
             }
-            Data data = new Data() { Average=average, Reviews = searchReviews};
-            return View("Index", data);
-
+            Data data = new Data() { Average = average, Reviews = searchReviews };
+            return PartialView(data);
         }
 
     }

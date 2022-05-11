@@ -14,12 +14,12 @@ namespace webAPI.NET.Data
         {
         }
 
-        public DbSet<webAPI.Models.Chat> Chat { get; set; }
-
         public DbSet<webAPI.Models.Contact> Contact { get; set; }
 
-        public DbSet<webAPI.Models.Message> Message { get; set; }
-
         public DbSet<webAPI.Models.User> User { get; set; }
+
+        public DbSet<webAPI.Models.Chat> Chat { get; set; }
+
+        public DbSet<webAPI.Models.Message> Message { get; set; }
     }
 }
