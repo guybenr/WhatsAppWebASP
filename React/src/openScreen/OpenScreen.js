@@ -29,12 +29,12 @@ function OpenScreen(props) {
             body: JSON.stringify(loginDetails)
         });
         result = await result.json();
-        // if(result === "Invalid username or password") {
-        //     handleShow();
-        //     return;
-        // }
-        // localStorage.setItem('user-token', JSON.stringify(result)); //authentication token
-        // console.log(result);
+        if(result === "Invalid username or password") {
+            handleShow();
+            return;
+        }
+        localStorage.setItem('user-token', JSON.stringify(result)); //authentication token
+        console.log(result);
         props.onSignIn(username);
         navigate('/Chat');
         

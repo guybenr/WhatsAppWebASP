@@ -22,7 +22,7 @@ function Chat(props) {
     }
 
     useEffect(async () => {
-        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contactId + "/messages/", {
+        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.userName + "/messages/", {
             method: 'GET',
             headers: {
                 "Authorization": "Bearer " + localStorage.getItem("user-token")

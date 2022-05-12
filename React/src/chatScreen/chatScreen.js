@@ -15,10 +15,12 @@ function ChatScreen(props) {
     const contactServer = React.createRef('');
 
     const [toAddContact, setToAddContact] = React.useState(false);
-    const [contacts, setContacts] = React.useState();
+    const [contactsSearch, setContactsSearch] = React.useState([]);
+    const [contacts, setContacts] = React.useState([]); 
     const [showChat, setshowChat] = React.useState(false);
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
+    const [count, setCount] = React.useState(0);
 
     useEffect(async () => {
         let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
@@ -27,8 +29,10 @@ function ChatScreen(props) {
                 "Authorization": "Bearer " + localStorage.getItem("user-token")
             },
         });
-        setContacts(await contactsResponse.json());
-    });
+        contactsResponse = (await contactsResponse.json());
+        setContacts(contactsResponse);
+        setContactsSearch(contactsResponse);
+    },[count, toAddContact]);
 
     const contactName = React.createRef('');
 
@@ -81,7 +85,7 @@ function ChatScreen(props) {
     }
 
     const doSearch = (query) => {
-        setContacts(contacts.filter((contact) => contact.name.includes(query)));
+        setContactsSearch(contacts.filter((contact) => contact.name.includes(query)));
     }
 
 
@@ -123,7 +127,7 @@ function ChatScreen(props) {
                         </div>
                     </div>
                     <Search setSearchQuery={doSearch} />
-                    <ContactListResult contactsList={contacts} showChat={showOpenChat} setDetails={setDetailsChat} />
+                    <ContactListResult contactsList={contactsSearch} showChat={showOpenChat} setDetails={setDetailsChat} />
                 </div>
                 {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails} contact={detailsChat} 
                                             chatName={detailsChat.name} setReRender={setReRender} reRender={reRender} />}

@@ -8,7 +8,7 @@ namespace webAPI.NET.Services
 	public class ContactService: IContactService
 	{
 		private readonly Context _context;
-		private static User _user = new User("Adi Aviv", "Adi1", "123456789", "image");
+		private static User _user = new User("adi", "adi aviv", "123456789", "image");
 		private readonly IChatService _chatService;
 
 		public ContactService (Context context)
