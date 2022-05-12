@@ -16,7 +16,7 @@ builder.Services.AddDbContext<Context>(options =>
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IChatService, ChatService>();
-builder.Services.AddScoped<IInvitationService, InvitationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddControllers();
