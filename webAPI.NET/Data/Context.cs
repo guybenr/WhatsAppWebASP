@@ -24,5 +24,7 @@ namespace webAPI.NET.Data
         public DbSet<webAPI.Models.Message> Message { get; set; }
 
         public DbSet<webAPI.NET.Models.Invitation> Invitation { get; set; }
+
+        public DbSet<webAPI.NET.Models.Transfer> Transfer { get; set; }
     }
 }

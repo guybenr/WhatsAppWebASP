@@ -15,13 +15,13 @@ namespace webAPI.NET.Controllers
     [ApiController]
     public class MessagesController : ControllerBase
     {
-        private readonly IMessageService _service;
+        private readonly IMessageService _messageService;
 
 
 
         public MessagesController(IMessageService service)
         {
-            _service = service;
+			_messageService = service;
         }
 
 
@@ -30,7 +30,7 @@ namespace webAPI.NET.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<Message>> GetMessage(string id)
 		{
-			return await _service.GetAll(id);
+			return await _messageService.GetAll(id);
 		}
 
 
@@ -39,7 +39,7 @@ namespace webAPI.NET.Controllers
 		[HttpGet("{id}")]
 		public async Task<Message> GetMessage(string id1, int id)
 		{
-			var message = await _service.Get(id1,id);
+			var message = await _messageService.Get(id1,id);
 			if (message == null)
 			{
 				return null;
@@ -52,9 +52,9 @@ namespace webAPI.NET.Controllers
 		// PUT: api/Contacts/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
-		public async Task<IActionResult> PutContact(string id1, int id, string content)
+		public async Task<IActionResult> PutMessage(string id1, int id, string content)
 		{
-			var isUpdate = await _service.Put(id1, id, content);
+			var isUpdate = await _messageService.Put(id1, id, content);
 			if (!isUpdate)
 			{
 				return BadRequest();
@@ -67,9 +67,9 @@ namespace webAPI.NET.Controllers
 		// POST: api/Contacts
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-		public async Task<IActionResult> PostContact(string id, string content)
+		public async Task<IActionResult> PostMessage(string id, string content)
 		{
-			var isAdd = await _service.Post(id, content);
+			var isAdd = await _messageService.Post(id, content);
 			if (!isAdd)
 			{
 				return BadRequest();
@@ -83,9 +83,9 @@ namespace webAPI.NET.Controllers
 
 		// DELETE: api/Contacts/5
 		[HttpDelete("{id}")]
-		public async Task<IActionResult> DeleteContact(string id1, int id)
+		public async Task<IActionResult> DeleteMessage(string id1, int id)
 		{
-			var isDelete = await _service.Delete(id1, id);
+			var isDelete = await _messageService.Delete(id1, id);
 			if (!isDelete)
 			{
 				return NotFound();

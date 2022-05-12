@@ -11,29 +11,31 @@ using webAPI.NET.Services;
 
 namespace webAPI.NET.Controllers
 {
-    [Route("api/invitations")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class InvitationsController : ControllerBase
+    public class TransfersController : ControllerBase
     {
-        private readonly IContactService _service;
+        private readonly IMessageService _service;
 
-        public InvitationsController(IContactService service)
+        public TransfersController(IMessageService service)
         {
             _service = service;
         }
 
 
-        // POST: api/Invitations
+        // POST: api/Transfers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostInvitation(Invitation invitation)
+        public async Task<ActionResult<Transfer>> PostTransfer(Transfer transfer)
         {
-            var isInvitation = await _service.Post(invitation.To, invitation.From, invitation.Server);
-            if (!isInvitation)
-			{
-                return NotFound();
-			}
-            return NotFound();
+            var isTransfer = await _service.Post(transfer.To, transfer.Content);
+            if (!isTransfer)
+            {
+                return BadRequest();
+            }
+            return NoContent();
         }
+
+        
     }
 }
