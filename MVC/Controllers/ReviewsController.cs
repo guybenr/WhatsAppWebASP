@@ -1,32 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
+using MVC.Services;
 
 namespace MVC.Controllers
 {
     public class ReviewsController : Controller
     {
-        private static List<Review> reviews = new List<Review>();
-        private static float average = 0;
-        private static int temp = 0;
+        private readonly IReviewService _service;
         public ReviewsController()
         {
-
+            _service = new ReviewService();
         }
         public IActionResult Index()
         {
-            Data data = new Data() { Average=average, Reviews=reviews};
+            Data data = _service.GetData();
             return View(data);
         }
 
         public IActionResult Index2()
         {
-            Data data = new Data() { Average = average, Reviews = reviews };
+            Data data = _service.GetData();
             return View(data);
         }
 
         public IActionResult Details(int id)
         {
-            Review review = reviews.Find(x => x.Id == id);
+            Review review = _service.GetReview(id);
             if (review != null)
             {
                 return View(review);
@@ -44,26 +43,14 @@ namespace MVC.Controllers
         [HttpPost]
         public IActionResult Create(string name, string description, int grade)
         {
-            float temp = average * reviews.Count;
-            int nextId;
-            if (reviews.Count == 0)
-            {
-                nextId = 1;
-            }
-            else
-            {
-                nextId = reviews.Max(x => x.Id);
-            }
-            reviews.Add(new Review() {Id = nextId + 1 , Name = name, Description = description, Grade = grade , dateTime=DateTime.Now});
-            average = (temp + grade) / (reviews.Count);
+            _service.Create(name, description, grade);
             return RedirectToAction(nameof(Index));
 
         }
 
         public IActionResult Edit(int id)
         {
-            Review review = reviews.Find(x => x.Id == id);
-            temp = review.Grade;
+            Review review = _service.Edit(id);
             return View(review);
 
         }
@@ -71,54 +58,29 @@ namespace MVC.Controllers
         [HttpPost]
         public IActionResult Edit(int id, string name, string description, int grade)
         {
-            Review review = reviews.Find(x => x.Id == id);
-            review.Name = name;
-            review.Description = description;
-            review.Grade = grade;
-            average = average * reviews.Count;
-            average -= temp;
-            average += review.Grade;
-            average = average / (reviews.Count);
+            _service.Edit2(id, name, description, grade);
             return RedirectToAction(nameof(Index));
         }
 
 
         public IActionResult Delete(int id)
         {
-            Review review = reviews.Find(x => x.Id == id);
+            Review review = _service.GetReview(id);
             return View(review);
         }
+
 
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteReal(int id)
         {
-            average = average * reviews.Count;
-            Review review = reviews.Find(x => x.Id == id);
-            average -= review.Grade;
-            reviews.Remove(review);
-            average = average / (reviews.Count);
+            _service.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Search(string input)
         {
-            List<Review> searchReviews = new List<Review>();
-            if (input == null)
-            {
-                searchReviews = reviews;
-            }
-            else
-            {
-                foreach (Review review in reviews)
-                {
-                    if (review.Name.StartsWith(input))
-                    {
-                        searchReviews.Add(review);
-                    }
-                }
-            }
-            Data data = new Data() { Average = average, Reviews = searchReviews };
+            Data data = _service.Search(input);
             return PartialView(data);
         }
 
