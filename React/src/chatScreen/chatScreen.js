@@ -15,21 +15,20 @@ function ChatScreen(props) {
     const contactServer = React.createRef('');
 
     const [toAddContact, setToAddContact] = React.useState(false);
-    const [contacts, setContacts] = React.useState(UsersData.usersChat.get(props.userLoginDetails));
+    const [contacts, setContacts] = React.useState();
     const [showChat, setshowChat] = React.useState(false);
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
 
-    // useEffect(async () => {
-    //     let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
-    //         method: 'GET',
-    //         headers: {
-    //             "Authorization": "Bearer " + localStorage.getItem("user-token")
-    //         },
-    //         body: ""
-    //     });
-    //     setContacts(await contactsResponse.json());
-    // });
+    useEffect(async () => {
+        let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("user-token")
+            },
+        });
+        setContacts(await contactsResponse.json());
+    });
 
     const contactName = React.createRef('');
 
