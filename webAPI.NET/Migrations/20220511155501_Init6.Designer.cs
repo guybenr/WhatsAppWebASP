@@ -12,8 +12,8 @@ using webAPI.NET.Data;
 namespace webAPI.NET.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20220510145528_Init")]
-    partial class Init
+    [Migration("20220511155501_Init6")]
+    partial class Init6
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,7 +84,7 @@ namespace webAPI.NET.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ChatId")
+                    b.Property<int>("ChatId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -126,6 +126,31 @@ namespace webAPI.NET.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("webAPI.NET.Models.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Invitation");
+                });
+
             modelBuilder.Entity("webAPI.Models.Contact", b =>
                 {
                     b.HasOne("webAPI.Models.User", null)
@@ -139,7 +164,9 @@ namespace webAPI.NET.Migrations
                 {
                     b.HasOne("webAPI.Models.Chat", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId");
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("webAPI.Models.Chat", b =>

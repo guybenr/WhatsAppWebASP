@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Models;
+using webAPI.NET.Models;
 
 namespace webAPI.NET.Data
 {
@@ -21,5 +22,7 @@ namespace webAPI.NET.Data
         public DbSet<webAPI.Models.Chat> Chat { get; set; }
 
         public DbSet<webAPI.Models.Message> Message { get; set; }
+
+        public DbSet<webAPI.NET.Models.Invitation> Invitation { get; set; }
     }
 }
