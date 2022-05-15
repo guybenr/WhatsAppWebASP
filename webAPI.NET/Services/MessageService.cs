@@ -7,7 +7,7 @@ namespace webAPI.NET.Services
 	public class MessageService : IMessageService
 	{
 		private readonly Context _context;
-		private static User _user = new User("Adi Aviv", "Adi1", "123456789", "image");
+		private static User _user = new User("adi", "Adi1", "123456789", "image");
 		private readonly IChatService _chatService;
 
 		public MessageService(Context context)

@@ -29,12 +29,12 @@ function Chat(props) {
             },
         });
         setMessages(await messages.json());
-    });
+    },[]);
 
     //function returns all of the Massage Components that are in the database
     const massagesList = messages.map((message, key) => {
         if (message.content !== "")
-            return <Massage content={message.content} isRecived={!message.sent} time={message.created} type={"text"}/>
+            return <Massage content={message.content} isRecived={!message.sent} time={new Date(Date.parse(message.created))} type={"text"}/>
         return <></>
     });
 

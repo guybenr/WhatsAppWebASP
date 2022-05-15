@@ -25,5 +25,10 @@ namespace webAPI.NET.Services
 			}
 			return isExist;
         }
+
+		public async Task<User> GetUser(string username)
+		{
+			return await _context.User.FindAsync(username);
+		}
 	}
 }

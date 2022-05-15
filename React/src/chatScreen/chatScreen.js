@@ -48,7 +48,7 @@ function ChatScreen(props) {
         if (contactUsername.current.value === '' || contactNickName.current.value === '' || contactServer.current.value === '') { // validation that the input isnt empty
             return;
         }
-        let userName = props.userLoginDetails;
+        let userName = props.userLoginDetails.id;
             //if the contact try to add himself
         if (contactUsername.current.value === userName && contactServer.current.value === "localhost:5028") {
             alert("Contact can't add himself");
@@ -97,7 +97,7 @@ function ChatScreen(props) {
     var name;
     var image;
     for (let i = 0; i < UsersData.usersList.length; ++i) {
-        if (UsersData.usersList[i].userName === props.userLoginDetails) {
+        if (UsersData.usersList[i].userName === props.userLoginDetails.id) {
             name = UsersData.usersList[i].nickName;
             image = UsersData.usersList[i].image;
             break;
@@ -122,14 +122,14 @@ function ChatScreen(props) {
                         <button onClick={logOut} type="button" className="btn btn-secondary">
                             <span className="LogOut">Log out</span>
                         </button>
-                        <div className="MyName">{name}
+                        <div className="MyName">{props.userLoginDetails.userName}
                             <button className="addChat btn btn-outline-secondary" type="submit" onClick={showAddContactModal}>+</button>
                         </div>
                     </div>
                     <Search setSearchQuery={doSearch} />
                     <ContactListResult contactsList={contactsSearch} showChat={showOpenChat} setDetails={setDetailsChat} />
                 </div>
-                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails} contact={detailsChat} 
+                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails.id} contact={detailsChat} 
                                             chatName={detailsChat.name} setReRender={setReRender} reRender={reRender} />}
                 <Modal show={toAddContact} onHide={() => setToAddContact(false)}>
                     <Modal.Header closeButton>

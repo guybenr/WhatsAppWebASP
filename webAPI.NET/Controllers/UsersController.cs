@@ -7,6 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Models;
 using webAPI.NET.Data;
+using webAPI.NET.Services;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 namespace webAPI.NET.Controllers
 {
@@ -14,66 +20,27 @@ namespace webAPI.NET.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly Context _context;
+        private readonly IUserService _usersService;
+        public IConfiguration _configuration;
 
-        public UsersController(Context context)
+        public UsersController(IUserService service, IConfiguration conf)
         {
-            _context = context;
+            _usersService = service;
+            _configuration = conf;
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUser()
         {
-            return await _context.User.ToListAsync();
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userId = identity.FindFirst("UserId").Value;
+            var user = await _usersService.GetUser(userId);
+            return Ok(user);
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(string id)
-        {
-            var user = await _context.User.FindAsync(id);
-
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
-
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
-        {
-            if (id != user.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(user).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Users
+/*        // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
@@ -96,27 +63,39 @@ namespace webAPI.NET.Controllers
             }
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
-        }
+        }*/
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(string id)
+        [HttpPost]
+        public async Task<ActionResult> userLogin([FromBody] LoginInfo loginInfo)
         {
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var user = await _usersService.IsExist(loginInfo.Username, loginInfo.Password);
+            if(user == null)
             {
-                return NotFound();
+                return Ok(new string("Invalid username or password"));
             }
-
-            _context.User.Remove(user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            // username and password correct, creating an authentication token
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, _configuration["JWTParams:Subject"]),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+                new Claim("UserId", loginInfo.Username)
+            };
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWTParams:SecretKey"]));
+            var mac = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var token = new JwtSecurityToken(
+                _configuration["JWTParams:Issuer"],
+                _configuration["JWTParams:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(20),
+                signingCredentials: mac);
+            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
+    }
 
-        private bool UserExists(string id)
+  /*  private bool UserExists(string id)
         {
             return _context.User.Any(e => e.Id == id);
         }
-    }
+    }*/
 }
