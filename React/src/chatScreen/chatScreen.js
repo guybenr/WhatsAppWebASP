@@ -26,15 +26,14 @@ function ChatScreen(props) {
         let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("user-token")
+                "Authorization": "Bearer " + props.userToken
             },
         });
         contactsResponse = (await contactsResponse.json());
         setContacts(contactsResponse);
         setContactsSearch(contactsResponse);
-    },[count, toAddContact]);
+    },[count, toAddContact, reRender]);
 
-    const contactName = React.createRef('');
 
     //function responsible on showing the modal contact
     const showAddContactModal = (event) => {
@@ -44,39 +43,43 @@ function ChatScreen(props) {
 
     // function adding the contact to the database
     const addContact = async (event) => {
+        //if one of the fields is empty
         event.preventDefault();
         if (contactUsername.current.value === '' || contactNickName.current.value === '' || contactServer.current.value === '') { // validation that the input isnt empty
             return;
         }
         let userName = props.userLoginDetails.id;
-            //if the contact try to add himself
+            //if the user tries to add himself
         if (contactUsername.current.value === userName && contactServer.current.value === "localhost:5028") {
             alert("Contact can't add himself");
             return;
+        // if the contact already added to the user contacts
         } else if (contacts.find( c => c.id === contactUsername.current.value && c.server === contactServer.current.value) !== undefined) {
             alert("Contact already added");
             return;
         }
-        let transfer = {from: userName, to: contactUsername.current.value, server: contactServer.current.value };
-        let result = await fetch("http://"+ transfer.server + "/api/invitations/", {
+        let invitation = {from: userName, to: contactUsername.current.value, server: contactServer.current.value };
+        let result = await fetch("http://"+ invitation.server + "/api/invitations/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "Accept": "application/json",
             },
-            body: JSON.stringify(transfer)
+            body: JSON.stringify(invitation)
         });
-        if(result.status !== 201) {
+        console.log(result);
+        if(result.status !== 204) {
             alert("Invalid Details");
             return;
         }
-        result = await fetch("http://localhost:5028/api/invitations/", {
+        result = await fetch("http://localhost:5028/api/contacts/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "Accept": "application/json",
+                "Authorization": "Bearer " + props.userToken
             },
-            body: JSON.stringify(transfer)
+            body: JSON.stringify(invitation)
         });
         contactUsername.current.value = "";
         contactNickName.current.value = "";
@@ -122,14 +125,14 @@ function ChatScreen(props) {
                         <button onClick={logOut} type="button" className="btn btn-secondary">
                             <span className="LogOut">Log out</span>
                         </button>
-                        <div className="MyName">{props.userLoginDetails.userName}
+                        <div className="MyName">{props.userLoginDetails.name}
                             <button className="addChat btn btn-outline-secondary" type="submit" onClick={showAddContactModal}>+</button>
                         </div>
                     </div>
                     <Search setSearchQuery={doSearch} />
                     <ContactListResult contactsList={contactsSearch} showChat={showOpenChat} setDetails={setDetailsChat} />
                 </div>
-                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails.id} contact={detailsChat} 
+                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails.id} contact={detailsChat} userToken={props.userToken}
                                             chatName={detailsChat.name} setReRender={setReRender} reRender={reRender} />}
                 <Modal show={toAddContact} onHide={() => setToAddContact(false)}>
                     <Modal.Header closeButton>
@@ -138,7 +141,7 @@ function ChatScreen(props) {
 
                     <Modal.Body>
                         <form>
-                            <input className="form-control me-2 add-contact" type="search" placeholder="Username" aria-label="Search" ref={contactName}></input>
+                            <input className="form-control me-2 add-contact" type="search" placeholder="Username" aria-label="Search" ref={contactUsername}></input>
                             <input className="form-control me-2 add-contact" type="search" placeholder="Nick Name" aria-label="Search" ref={contactNickName}></input>
                             <input className="form-control me-2 add-contact" type="search" placeholder="Server" aria-label="Search" ref={contactServer}></input>
                         </form>

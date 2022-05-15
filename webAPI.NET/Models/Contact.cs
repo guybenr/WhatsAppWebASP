@@ -1,32 +1,32 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace webAPI.Models
 {
     public class Contact
     {
-        public Contact(string name, string userName, string server, string last, DateTime lastDate, string userId)
+        public Contact(string id, string name, string server, string last, DateTime lastDate, string userId)
         {
-            Name = name;
-            UserName = userName;    
+            Id = id;
+            Name = name;    
             Server = server;    
             Last = last;    
             LastDate = lastDate; 
             UserId = userId;
         }
-        [Key]
+        [Key, Column(Order = 0)]
         [Required]
-        public string Name { get; set; }
+        public string? Id { get; set; }
 
-        [Required]
-        public string UserName { get; set; }
-        [Required]
-        public string Server { get; set; }
-        [Required]
-        public string Last { get; set; }
-        [Required]
-        public DateTime LastDate { get; set; }
-        [Required]
+        [Key, Column(Order = 1)]
+        [JsonIgnore]
         public string UserId { get; set; }
+        public string Name { get; set; }
+        public string Server { get; set; }
+        public string Last { get; set; }
+        public DateTime LastDate { get; set; }
+        
 
     }
 }

@@ -8,7 +8,6 @@ namespace webAPI.NET.Services
 	public class ContactService: IContactService
 	{
 		private readonly Context _context;
-		private static User _user = new User("adi", "adi aviv", "123456789", "image");
 		private readonly IChatService _chatService;
 
 		public ContactService (Context context)
@@ -18,15 +17,15 @@ namespace webAPI.NET.Services
 		}
 
 
-		public async Task<List<Contact>> GetAll()
+		public async Task<List<Contact>> GetAll(string userId)
 		{
-			return await _context.Contact.Where(x => x.UserId == _user.Id).ToListAsync();
+			return await _context.Contact.Where(x => x.UserId == userId).ToListAsync();
 		}
 
-		public async Task<Contact> Get(string id)
+		public async Task<Contact> Get(string id1, string id2)
 		{
-			var contacts = await _context.Contact.Where(x => x.UserId == _user.Id).ToListAsync();
-			var contact = contacts.Find(x => x.Name == id);
+			var contacts = await _context.Contact.Where(x => x.UserId == id1).ToListAsync();
+			var contact = contacts.Find(x => x.Id == id2);
 
 			if (contact == null)
 			{
@@ -36,9 +35,9 @@ namespace webAPI.NET.Services
 			return contact;
 		}
 
-		public async Task<bool> Post(string id, string name, string server)
+		public async Task<bool> Post(string userId, string id, string name, string server)
 		{
-			Contact contact = new Contact(id, name, server, "", DateTime.Now, _user.Id);
+			Contact contact = new Contact(id, name, server, "", DateTime.Now, userId);
 			_context.Contact.Add(contact);
 			try
 			{
@@ -55,7 +54,7 @@ namespace webAPI.NET.Services
 					throw;
 				}
 			}
-			if (!await _chatService.PostChat(_user.Id, id))
+			if (!await _chatService.PostChat(userId, id))
 			{
 				return false;
 			}
@@ -63,15 +62,15 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
-		public async Task<bool> Put(string id, string name, string server)
+		public async Task<bool> Put(string userId, string id, string name, string server)
 		{
-			var contact = await Get(id);
+			var contact = await Get(userId, id);
 			if (contact == null)
 			{
 				return false;
 			}
 
-			contact.UserName = name;
+			contact.Name = name;
 
 			try
 			{

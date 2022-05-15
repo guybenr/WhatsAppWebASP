@@ -5,13 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using webAPI.Models;
 using webAPI.NET.Data;
 using webAPI.NET.Models;
 using webAPI.NET.Services;
 
 namespace webAPI.NET.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/transfer")]
     [ApiController]
     public class TransfersController : ControllerBase
     {
@@ -26,9 +27,10 @@ namespace webAPI.NET.Controllers
         // POST: api/Transfers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Transfer>> PostTransfer(Transfer transfer)
+        public async Task<ActionResult<Transfer>> PostTransfer([FromBody] Transfer transfer)
         {
-            var isTransfer = await _service.Post(transfer.To, transfer.Content);
+            Message message = new Message(transfer.Content, DateTime.Now, false);
+            var isTransfer = await _service.Post(transfer.To, transfer.From, message);
             if (!isTransfer)
             {
                 return BadRequest();

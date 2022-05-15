@@ -10,15 +10,13 @@ namespace webAPI.NET.Models
             To = to;
             Content = content;
         }
-
-        [Key]
-        [Required]
+       
         public int Id { get; set; }
-        [Required]
+        
         public string From { get; set; }
-        [Required]
+        
         public string To { get; set; }
-        [Required]
+        
         public string Content { get; set; }
     }
 }

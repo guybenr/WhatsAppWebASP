@@ -22,21 +22,22 @@ function Chat(props) {
     }
 
     useEffect(async () => {
-        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.userName + "/messages/", {
+        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.id + "/messages/", {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer " + localStorage.getItem("user-token")
+                "Authorization": "Bearer " + props.userToken
             },
         });
         setMessages(await messages.json());
-    },[]);
+        console.log(messages);
+    },[props.reRender, props.chatName]);
 
     //function returns all of the Massage Components that are in the database
     const massagesList = messages.map((message, key) => {
         if (message.content !== "")
             return <Massage content={message.content} isRecived={!message.sent} time={new Date(Date.parse(message.created))} type={"text"}/>
         return <></>
-    });
+    }).reverse();
 
     var ImageChat;
     for (let i = 0; i < UsersData.usersList.length; ++i) {
@@ -65,25 +66,26 @@ function Chat(props) {
             return;
         event.preventDefault();
         let message = {from: props.currentUserId, to: props.contact.id, content: messageContent}
-        await fetch("http://localhost:5028/api/transfer", {
+        console.log(message);
+        await fetch("http://localhost:5028/api/contacts/" + message.to + "/messages", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "Accept": "application/json",
-                "Authorization": "Bearer " + localStorage.getItem("user-token")
+                "Authorization": "Bearer " + props.userToken
             },
-            body: JSON.stringify(message)
+            body: JSON.stringify({content : messageContent})
         });
         await fetch("http://"+ props.contact.server + "/api/transfer", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "Accept": "application/json",
-                "Authorization": "Bearer " + localStorage.getItem("user-token")
             },
             body: JSON.stringify(message)
         });
-        props.reRender(!props.reRender);
+        toSendMassage.current.value = "";
+        props.setReRender(!props.reRender);
     }
 
     //function sending an image massage

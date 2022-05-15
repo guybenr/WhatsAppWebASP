@@ -28,12 +28,12 @@ namespace webAPI.NET.Controllers
         [HttpPost]
         public async Task<IActionResult> PostInvitation(Invitation invitation)
         {
-            var isInvitation = await _service.Post(invitation.From, invitation.From, invitation.Server);
+            var isInvitation = await _service.Post(invitation.To, invitation.From, invitation.From, invitation.Server);
             if (!isInvitation)
-			{
+            {
                 return NotFound();
-			}
-            return NotFound();
+            }
+            return NoContent();
         }
     }
 }

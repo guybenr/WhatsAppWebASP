@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,14 +28,19 @@ namespace webAPI.NET.Controllers
 
 		}
 
-
+		private string GetUserIdFromToken()
+        {
+			var identity = HttpContext.User.Identity as ClaimsIdentity;
+			var userId = identity.FindFirst("UserId").Value;
+			return userId;
+		}
 
 		// GET: api/Contacts
 		[Authorize]
 		[HttpGet]
 		public async Task<IEnumerable<Contact>> GetContact()
 		{
-			return await _contactService.GetAll();
+			return await _contactService.GetAll(GetUserIdFromToken());
 		}
 
 
@@ -43,7 +49,7 @@ namespace webAPI.NET.Controllers
 		[HttpGet("{id}")]
 		public async Task<Contact> GetContact(string id)
 		{
-			var contact = await _contactService.Get(id);
+			var contact = await _contactService.Get(GetUserIdFromToken(), id);
 			if (contact == null)
 			{
 				return null;
@@ -58,7 +64,7 @@ namespace webAPI.NET.Controllers
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutContact(string id, UpdateContact updateContact)
 		{
-			var isUpdate = await _contactService.Put(id, updateContact.Name, updateContact.Server);
+			var isUpdate = await _contactService.Put(GetUserIdFromToken(), id, updateContact.Name, updateContact.Server);
 			if (!isUpdate)
 			{
 				return BadRequest();
@@ -70,20 +76,27 @@ namespace webAPI.NET.Controllers
 
 		// POST: api/Contacts
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
+		/*[HttpPost]
 		public async Task<IActionResult> PostContact(NewContact newContant)
 		{
-			var isAdd = await _contactService.Post(newContant.Id, newContant.Name, newContant.Server);
+			var isAdd = await _contactService.Post(GetUserIdFromToken(), newContant.Id, newContant.Name, newContant.Server);
 			if (!isAdd)
 			{
 				return Conflict();
 			}
 			return NoContent();
-
-
+		}*/
+		[Authorize]
+		[HttpPost]
+		public async Task<IActionResult> PostInvitation(Invitation invitation)
+		{
+			var isInvitation = await _contactService.Post(invitation.From, invitation.To, invitation.To, invitation.Server);
+			if (!isInvitation)
+			{
+				return NotFound();
+			}
+			return NoContent();
 		}
-
-
 
 		// DELETE: api/Contacts/5
 		[HttpDelete("{id}")]
@@ -98,32 +111,23 @@ namespace webAPI.NET.Controllers
 		}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 		// GET: api/Contacts
+		[Authorize]
 		[HttpGet("{id}/messages")]
 		public async Task<IEnumerable<Message>> GetMessage(string id)
 		{
-			return await _messageService.GetAll(id);
+			var x = await _messageService.GetAll(GetUserIdFromToken(), id);
+			return x;
 		}
 
 
 
 		// GET: api/Contacts/5
+		[Authorize]
 		[HttpGet("{id1}/messages/{id}")]
 		public async Task<Message> GetMessage(string id1, int id)
 		{
-			var message = await _messageService.Get(id1, id);
+			var message = await _messageService.Get(GetUserIdFromToken(), id1, id);
 			if (message == null)
 			{
 				return null;
@@ -135,10 +139,11 @@ namespace webAPI.NET.Controllers
 
 		// PUT: api/Contacts/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[Authorize]
 		[HttpPut("{id1}/messages/{id}")]
 		public async Task<IActionResult> PutMessage(string id1, int id, NewUpdateMessage message)
 		{
-			var isUpdate = await _messageService.Put(id1, id, message.Content);
+			var isUpdate = await _messageService.Put(GetUserIdFromToken(), id1, id, message.Content);
 			if (!isUpdate)
 			{
 				return BadRequest();
@@ -146,30 +151,29 @@ namespace webAPI.NET.Controllers
 			return NoContent();
 		}
 
+		
 
-
-		// POST: api/Contacts
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //Post api/contacts/{id}/message - new message from current user to {id}
+        [Authorize]
 		[HttpPost("{id}/messages")]
-		public async Task<IActionResult> PostMessage(string id, NewUpdateMessage message)
-		{
-			var isAdd = await _messageService.Post(id, message.Content);
-			if (!isAdd)
-			{
-				return BadRequest();
-			}
-			return NoContent();
+        public async Task<IActionResult> PostMessage(string id, NewUpdateMessage message)
+        {
+			Message msg = new Message(message.Content, DateTime.Now, true);
+            var isAdd = await _messageService.Post(GetUserIdFromToken(), id, msg);
+            if (!isAdd)
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
 
 
-		}
 
-
-
-		// DELETE: api/Contacts/5
-		[HttpDelete("{id1}/messages/{id}")]
+        // DELETE: api/Contacts/5
+        [HttpDelete("{id1}/messages/{id}")]
 		public async Task<IActionResult> DeleteMessage(string id1, int id)
 		{
-			var isDelete = await _messageService.Delete(id1, id);
+			var isDelete = await _messageService.Delete(GetUserIdFromToken(), id1, id);
 			if (!isDelete)
 			{
 				return NotFound();

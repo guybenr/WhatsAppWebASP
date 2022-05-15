@@ -14,6 +14,10 @@ namespace webAPI.NET.Data
             : base(options)
         {
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Contact>().HasKey("Id", "UserId");
+        }
 
         public DbSet<webAPI.Models.Contact> Contact { get; set; }
 

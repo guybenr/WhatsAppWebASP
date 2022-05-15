@@ -17,9 +17,9 @@ namespace webAPI.NET.Services
 		}
 
 
-		public async Task<List<Message>> GetAll(string id)
+		public async Task<List<Message>> GetAll(string userId, string id)
 		{
-			var chat = await _chatService.Get(_user.Id, id);
+			var chat = await _chatService.Get(userId, id);
 			var messages = _context.Message.Where(m=> m.ChatId == chat.Id);
 			if (chat == null || messages == null)
 			{
@@ -29,9 +29,9 @@ namespace webAPI.NET.Services
 		}
 
 
-		public async Task<Message> Get(string id1, int id2)
+		public async Task<Message> Get(string id, string id1, int id2)
 		{
-			var messages = await GetAll(id1);
+			var messages = await GetAll( id, id1);
 			var message = messages.Find(x => x.Id == id2);
 			if (message == null)
 			{
@@ -43,10 +43,9 @@ namespace webAPI.NET.Services
 
 
 
-		public async Task<bool> Post(string id, string content)
+		public async Task<bool> Post(string senderId, string reciverId, Message message)
 		{
-			Message message = new Message(content, DateTime.Now, true);
-			if (!await _chatService.addMessage(_user.Id,id,message))
+			if (!await _chatService.addMessage(senderId,reciverId,message))
 			{
 				return false;
 			}
@@ -54,9 +53,9 @@ namespace webAPI.NET.Services
 		}
 
 
-		public async Task<bool> Put(string id1, int id, string content)
+		public async Task<bool> Put(string userId, string id1, int id, string content)
 		{
-			var message = await Get(id1, id);
+			var message = await Get(userId, id1, id);
 			if (message == null)
 			{
 				return false;
@@ -83,9 +82,9 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
-		public async Task<bool> Delete(string id1, int id)
+		public async Task<bool> Delete(string userId, string id1, int id)
 		{
-			Message message = await Get(id1,id);
+			Message message = await Get(userId,id1,id);
 			if (message == null)
 			{
 				return false;
