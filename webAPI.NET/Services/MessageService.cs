@@ -7,7 +7,6 @@ namespace webAPI.NET.Services
 	public class MessageService : IMessageService
 	{
 		private readonly Context _context;
-		private static User _user = new User("adi", "Adi1", "123456789", "image");
 		private readonly IChatService _chatService;
 
 		public MessageService(Context context)
@@ -49,6 +48,21 @@ namespace webAPI.NET.Services
 			{
 				return false;
 			}
+			var contact = await _context.Contact.Where<Contact>((Contact x) => x.Id == reciverId && x.UserId == senderId).FirstOrDefaultAsync();
+			if(contact == null)
+            {
+				return false;
+            }
+			contact.LastDate = DateTime.Now;
+			contact.Last= message.Content;
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex)
+            {
+				return false;
+            }
 			return true;
 		}
 
