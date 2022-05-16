@@ -29,7 +29,7 @@ function Chat(props) {
         return <></>
     }).reverse();
 
-    var ImageChat = "https://cdn-icons.flaticon.com/png/128/924/premium/924915.png?token=exp=1652717894~hmac=9f724ce5c0a58cc9ece3e0107ded640e"
+    var ImageChat = "https://cdn-icons.flaticon.com/png/512/924/premium/924915.png?token=exp=1652728089~hmac=e7e756d9f3e40f26bd2bd3413f7a987c"
 
     //function handeling sending massage to a contact
     const sendMessage = async (event) => {
