@@ -321,6 +321,8 @@ body {
 }
 
 .textBox {
+  position: relative;
+  right: 5%;
   border-radius: 50px;
   width: 60%;
 }

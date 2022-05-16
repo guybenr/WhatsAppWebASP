@@ -2,12 +2,8 @@ import UsersData from "../usersData/UsersData";
 
 function ContactItem(props) {
 
-    var ImageChat;
-    for (let i = 0; i < UsersData.usersList.length; ++i) {
-        if (UsersData.usersList[i].userName === props.contactName) {
-            ImageChat = UsersData.usersList[i].image;
-        }
-    }
+    var ImageChat = "https://cdn-icons.flaticon.com/png/128/924/premium/924915.png?token=exp=1652717894~hmac=9f724ce5c0a58cc9ece3e0107ded640e"
+    
 
     // function calculates the time that passed since time argument and return a string represnts it 
     const timePassedSince = (time) => {

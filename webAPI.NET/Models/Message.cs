@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace webAPI.Models
 {
@@ -18,7 +19,7 @@ namespace webAPI.Models
         public DateTime Created { get; set; }
         
         public bool Sent { get; set; }
-
+        [JsonIgnore]
         public int ChatId { get; set; }
 
     }

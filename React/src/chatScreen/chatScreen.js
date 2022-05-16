@@ -13,7 +13,7 @@ function ChatScreen(props) {
     const contactUsername = React.createRef('');
     const contactNickName = React.createRef('');
     const contactServer = React.createRef('');
-
+    var image = "https://cdn-icons-png.flaticon.com/128/4333/4333609.png";
     const [toAddContact, setToAddContact] = React.useState(false);
     const [contactsSearch, setContactsSearch] = React.useState([]);
     const [contacts, setContacts] = React.useState([]); 
@@ -96,16 +96,6 @@ function ChatScreen(props) {
     const showOpenChat = (event) => {
         event.preventDefault();
         setshowChat(true);
-    }
-
-    var name;
-    var image;
-    for (let i = 0; i < UsersData.usersList.length; ++i) {
-        if (UsersData.usersList[i].userName === props.userLoginDetails.id) {
-            name = UsersData.usersList[i].nickName;
-            image = UsersData.usersList[i].image;
-            break;
-        }
     }
 
 

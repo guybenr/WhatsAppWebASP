@@ -11,7 +11,7 @@ function RegisterScreen(props) {
     const [showError, setShowError] = React.useState(false);
     const [bodyMassage, setBodyMassage] = React.useState("");
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         console.log(localStorage.getItem('user-info'));
         var userName = document.getElementById('username').value;
@@ -63,16 +63,23 @@ function RegisterScreen(props) {
             return;
         }
         // adds the user to the users database
-        UsersData.usersList.push({
-            userName: userName,
-            password: password,
-            nickName: nickName,
-            image: fileInput.src
+        let user = {id: userName, name: nickName, password: password, image: ""};
+        let token = await fetch("http://localhost:5028/api/users/register", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "Accept":"application/json"
+            },
+            body: JSON.stringify(user)
         });
-        UsersData.usersChat.set(
-            userName, []
-        );
-        props.onSignUp(userName);
+        token = await token.json();
+        if(token === "Username already taken") {
+            setShowError(true);
+            setBodyMassage("Username already taken");
+            return;
+        }
+        props.onSignUp(user);           //passing all of the user details to the chatScreen component
+        props.setUserToken(token);      //passing the token to the chatScreen component
         navigate('/Chat');
     }
 

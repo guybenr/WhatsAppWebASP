@@ -8,18 +8,8 @@ import UsersData from "../usersData/UsersData";
 
 
 function Chat(props) {
-    let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
-    const [records, setRecord] = React.useState(false);
-    const [hadRecorded, setHadRecorded] = React.useState(false);
     const [messages, setMessages] = React.useState([]);
     const toSendMassage = React.createRef('');
-    var massageContent = "";
-    var massageType = "";
-    //open window for record
-    const showRecordModal = (event) => {
-        event.preventDefault();
-        setRecord(true);
-    }
 
     useEffect(async () => {
         let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.id + "/messages/", {
@@ -39,34 +29,17 @@ function Chat(props) {
         return <></>
     }).reverse();
 
-    var ImageChat;
-    for (let i = 0; i < UsersData.usersList.length; ++i) {
-        if (UsersData.usersList[i].userName === props.chatName) {
-            ImageChat = UsersData.usersList[i].image;
-            break;
-        }
-    }
-
-    // function sending an audio massage
-    const sendRecord = (event) => {
-        if(!hadRecorded || isRecording)
-            return;
-        event.preventDefault();
-        let recordContent = audioURL;
-        props.massages.unshift({ massage: recordContent, isRecived: false, time: new Date(), type: "audio" });
-        props.setReRender(!props.reRender);
-        setHadRecorded(false);
-        setRecord(false);
-    }
+    var ImageChat = "https://cdn-icons.flaticon.com/png/128/924/premium/924915.png?token=exp=1652717894~hmac=9f724ce5c0a58cc9ece3e0107ded640e"
 
     //function handeling sending massage to a contact
-    const handlePressingKey = async (event) => {
+    const sendMessage = async (event) => {
         let messageContent = toSendMassage.current.value;
         if (event.key !== "Enter" || messageContent === "")
             return;
         event.preventDefault();
         let message = {from: props.currentUserId, to: props.contact.id, content: messageContent}
         console.log(message);
+        //post to the server
         await fetch("http://localhost:5028/api/contacts/" + message.to + "/messages", {
             method: 'POST',
             headers: {
@@ -76,6 +49,7 @@ function Chat(props) {
             },
             body: JSON.stringify({content : messageContent})
         });
+        // transfer to the contact's server
         await fetch("http://"+ props.contact.server + "/api/transfer", {
             method: 'POST',
             headers: {
@@ -86,55 +60,6 @@ function Chat(props) {
         });
         toSendMassage.current.value = "";
         props.setReRender(!props.reRender);
-    }
-
-    //function sending an image massage
-    const sendImage = (event) => {
-        massageContent = URL.createObjectURL(event.target.files[0]);
-        massageType = "image";
-        event.target.value = "";
-        sendFile();
-    }
-
-    //function sending an image massage
-    const sendVideo = (event) => {
-        let file = event.target.files[0];
-        event.target.value = "";
-        getBase64(file);
-    }
-
-    //function converting file to base64
-    const getBase64 = (file) => {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            massageContent = reader.result;
-            massageType = "video";
-            sendFile();
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    }
-
-    //function sending the massageContent by adding it to the dataBase and re rendering the outer component
-    const sendFile = (event) => {
-        props.massages.unshift({ massage: massageContent, isRecived: false, time: new Date(), type: massageType });
-        props.setReRender(!props.reRender);
-    }
-
-    // function sending a text massage
-    const sendText = (event) => {
-        massageContent = toSendMassage.current.value;
-        massageType = "text";
-        toSendMassage.current.value = "";
-        sendFile();
-    }
-
-    //function starting to record an audio massage
-    const startRecord = () => {
-        setHadRecorded(true);
-        startRecording();
     }
 
     return (
@@ -151,31 +76,10 @@ function Chat(props) {
             </div>
             <div className="chat-box">
                 <div className="toSend">
-                    <input onInput={sendImage} type="file" id="upload" accept="image/*" hidden />
-                    <label className="photo btn" id="photo" for="upload"></label>
-                    <input onInput={sendVideo} type="file" id="video-upload" accept="video/*" hidden />
-                    <label className="video btn" id="video" for="video-upload"></label>
-                    <button className="record" onClick={showRecordModal}></button>
-                    <input onKeyPress={handlePressingKey} ref={toSendMassage} type="text" class="form-control textBox"></input>
+                    <input onKeyPress={sendMessage} ref={toSendMassage} type="text" class="form-control textBox"></input>
                     <span className="glyphicon glyphicon-search form-control-feedback"></span>
                 </div>
             </div>
-            <Modal show={records} onHide={() => {setRecord(false); setHadRecorded(false); stopRecording()}}>
-                <Modal.Body className="bodyRecordWin">
-                    <div>
-                        <audio src={audioURL} controls className="audio" />
-                        <button onClick={startRecord} disabled={isRecording} className=" form-control startRecord">
-                            Start recording
-                        </button>
-                        <button onClick={stopRecording} disabled={!isRecording} className=" form-control stoptRecord">
-                            Stop
-                        </button>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer className="sendRecord" type="button" onClick={sendRecord}>
-                    Send
-                </Modal.Footer>
-            </Modal>
         </div>
     );
 }

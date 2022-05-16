@@ -20,7 +20,7 @@ function OpenScreen(props) {
         var username = document.getElementById('username').value;
         var password = document.getElementById('exampleInputPassword1').value;
         let loginDetails = { Username: username, Password: password };
-        let token = await fetch("http://localhost:5028/api/users", {
+        let token = await fetch("http://localhost:5028/api/users/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -42,9 +42,8 @@ function OpenScreen(props) {
             },
         });
         userDetails = await userDetails.json();
-        props.onSignIn(userDetails);
-        props.setUserToken(token);
-        console.log(userDetails);
+        props.onSignIn(userDetails); //passing all of the user details to the chatScreen component
+        props.setUserToken(token);   //passing the token to the chatScreen component
         navigate('/Chat');
         
     }

@@ -41,9 +41,11 @@ namespace webAPI.NET.Controllers
         }
 
         // POST: api/users/register - function adding a new user to the database and generate a token
-        [HttpPost("register")]
+        [Route("register")]
+        [HttpPost]
         public async Task<ActionResult<User>> PostUser([FromBody] User user)
         {
+            //User u = new User(user.Id, user.Name, user.Password, user.Image);
             var hasAdded = await _usersService.AddUser(user);
             if(hasAdded)
             {
@@ -71,7 +73,7 @@ namespace webAPI.NET.Controllers
                 signingCredentials: mac);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
+        [Route("login")]
         [HttpPost]
         public async Task<ActionResult> userLogin([FromBody] LoginInfo loginInfo)
         {
@@ -84,10 +86,4 @@ namespace webAPI.NET.Controllers
             return Ok(GenerateToken(loginInfo.Username));
         }
     }
-
-  /*  private bool UserExists(string id)
-        {
-            return _context.User.Any(e => e.Id == id);
-        }
-    }*/
 }
