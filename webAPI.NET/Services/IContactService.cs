@@ -12,7 +12,7 @@ namespace webAPI.NET.Services
 
 		public  Task<bool> Put(string userId, string id, string name, string server);
 
-		public Task<bool> Delete(string id);
+		public Task<bool> Delete(string userId, string id);
 
 
 		public bool ContactExists(string id);

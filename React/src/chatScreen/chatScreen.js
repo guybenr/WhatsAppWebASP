@@ -72,6 +72,7 @@ function ChatScreen(props) {
             alert("Invalid Details");
             return;
         }
+        let newContact = {id: contactUsername.current.value, name: contactNickName.current.value, server: contactServer.current.value };
         result = await fetch("http://localhost:5028/api/contacts/", {
             method: 'POST',
             headers: {
@@ -79,7 +80,7 @@ function ChatScreen(props) {
                 "Accept": "application/json",
                 "Authorization": "Bearer " + props.userToken
             },
-            body: JSON.stringify(invitation)
+            body: JSON.stringify(newContact)
         });
         contactUsername.current.value = "";
         contactNickName.current.value = "";

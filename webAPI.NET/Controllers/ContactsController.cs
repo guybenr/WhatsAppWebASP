@@ -73,24 +73,11 @@ namespace webAPI.NET.Controllers
 		}
 
 
-
-		// POST: api/Contacts
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		/*[HttpPost]
-		public async Task<IActionResult> PostContact(NewContact newContant)
-		{
-			var isAdd = await _contactService.Post(GetUserIdFromToken(), newContant.Id, newContant.Name, newContant.Server);
-			if (!isAdd)
-			{
-				return Conflict();
-			}
-			return NoContent();
-		}*/
 		[Authorize]
 		[HttpPost]
-		public async Task<IActionResult> PostInvitation(Invitation invitation)
+		public async Task<IActionResult> PostNewContact(NewContact newContact)
 		{
-			var isInvitation = await _contactService.Post(invitation.From, invitation.To, invitation.To, invitation.Server);
+			var isInvitation = await _contactService.Post(GetUserIdFromToken(), newContact.Id, newContact.Name, newContact.Server);
 			if (!isInvitation)
 			{
 				return NotFound();
@@ -99,10 +86,11 @@ namespace webAPI.NET.Controllers
 		}
 
 		// DELETE: api/Contacts/5
+		[Authorize]
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteContact(string id)
 		{
-			var isDelete = await _contactService.Delete(id);
+			var isDelete = await _contactService.Delete(GetUserIdFromToken(), id);
 			if (!isDelete)
 			{
 				return NotFound();
@@ -170,6 +158,7 @@ namespace webAPI.NET.Controllers
 
 
         // DELETE: api/Contacts/5
+		[Authorize]
         [HttpDelete("{id1}/messages/{id}")]
 		public async Task<IActionResult> DeleteMessage(string id1, int id)
 		{

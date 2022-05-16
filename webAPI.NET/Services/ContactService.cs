@@ -22,10 +22,10 @@ namespace webAPI.NET.Services
 			return await _context.Contact.Where(x => x.UserId == userId).ToListAsync();
 		}
 
-		public async Task<Contact> Get(string id1, string id2)
+		public async Task<Contact> Get(string userId, string id)
 		{
-			var contacts = await _context.Contact.Where(x => x.UserId == id1).ToListAsync();
-			var contact = contacts.Find(x => x.Id == id2);
+			var contacts = await _context.Contact.Where(x => x.UserId == userId).ToListAsync();
+			var contact = contacts.Find(x => x.Id == id);
 
 			if (contact == null)
 			{
@@ -91,9 +91,9 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
-		public async Task<bool> Delete(string id)
+		public async Task<bool> Delete(string userId, string id)
 		{
-			var contact = await _context.Contact.FindAsync(id);
+			var contact = await _context.Contact.Where<Contact>(c => c.UserId == userId && c.Id == id).FirstOrDefaultAsync();   //FindAsync(id);
 			if (contact == null)
 			{
 				return false;
