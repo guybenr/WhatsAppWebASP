@@ -8,7 +8,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ChatScreen from './chatScreen/chatScreen';
 
 
-
 function App() {
   const [userLoginDetails, setUserLoginDetails] = React.useState('');
   const [userToken, setUserToken] = React.useState('');

@@ -5,11 +5,16 @@ import { Modal } from "react-bootstrap";
 import { render } from "react-dom";
 import useRecorder from "./useRecorder";
 import UsersData from "../usersData/UsersData";
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import connection from "../openScreen/OpenScreen";
+
 
 
 function Chat(props) {
     const [messages, setMessages] = React.useState([]);
     const toSendMassage = React.createRef('');
+   
+
 
     useEffect(async () => {
         let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.id + "/messages/", {
@@ -60,6 +65,8 @@ function Chat(props) {
         });
         toSendMassage.current.value = "";
         props.setReRender(!props.reRender);
+        // alarm the server that change happend
+
     }
 
     return (

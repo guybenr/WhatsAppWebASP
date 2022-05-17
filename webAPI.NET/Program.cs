@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using webAPI.NET.Data;
 using webAPI.NET.Services;
+using webAPI.NET.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false;
@@ -38,6 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Allow All",
@@ -47,7 +50,13 @@ builder.Services.AddCors(options =>
             });
 });
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
+
+app.UseRouting();
+
+app.UseCors("Allow All");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -56,10 +65,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("Allow All");
+app.UseHttpsRedirection();
+
 app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chatHub");
+});
 
 app.Run();
