@@ -5,9 +5,9 @@ namespace webAPI.NET.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task Changed(string message)
+        public async Task Changed()
         {
-            await Clients.All.SendAsync("changed", message);
+            await Clients.All.SendAsync("changes recived");
         }
     }
 }

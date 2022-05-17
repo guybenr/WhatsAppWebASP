@@ -7,6 +7,7 @@ import ContactItem from "../contactItem/ContactItem";
 import Search from "../search/Search";
 import Chat from "../chat/Chat";
 import ContactListResult from "../contactsListResult/ContactListResult";
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 function ChatScreen(props) {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ function ChatScreen(props) {
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
     const [count, setCount] = React.useState(0);
+    const [connection, setConnection] = React.useState(true);
 
     useEffect(async () => {
         let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
@@ -32,7 +34,18 @@ function ChatScreen(props) {
         contactsResponse = (await contactsResponse.json());
         setContacts(contactsResponse);
         setContactsSearch(contactsResponse);
+        start();
     },[count, toAddContact, reRender]);
+
+    async function start() {
+        const connection = new HubConnectionBuilder().withUrl("http://localhost:5028/chatHub").configureLogging(LogLevel.Information).build();
+        await connection.start().then(() => {
+            setConnection(connection);
+            connection.on("changes recived", () => {
+                setReRender(!reRender);
+            })
+        })
+    }
 
 
     //function responsible on showing the modal contact
@@ -67,7 +80,6 @@ function ChatScreen(props) {
             },
             body: JSON.stringify(invitation)
         });
-        console.log(result);
         if(result.status !== 204) {
             alert("Invalid Details");
             return;
@@ -85,6 +97,7 @@ function ChatScreen(props) {
         contactUsername.current.value = "";
         contactNickName.current.value = "";
         contactServer.current.value = "";
+        props.connection.invoke("Changed");
         setToAddContact(false);
     }
 
@@ -123,7 +136,7 @@ function ChatScreen(props) {
                     <Search setSearchQuery={doSearch} />
                     <ContactListResult contactsList={contactsSearch} showChat={showOpenChat} setDetails={setDetailsChat} />
                 </div>
-                {(detailsChat !== "") && <Chat currentUserId={props.userLoginDetails.id} contact={detailsChat} userToken={props.userToken}
+                {(detailsChat !== "") && <Chat connection={connection} currentUserId={props.userLoginDetails.id} contact={detailsChat} userToken={props.userToken}
                                             chatName={detailsChat.name} setReRender={setReRender} reRender={reRender} />}
                 <Modal show={toAddContact} onHide={() => setToAddContact(false)}>
                     <Modal.Header closeButton>

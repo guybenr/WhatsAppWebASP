@@ -11,7 +11,7 @@ import ChatScreen from './chatScreen/chatScreen';
 function App() {
   const [userLoginDetails, setUserLoginDetails] = React.useState('');
   const [userToken, setUserToken] = React.useState('');
-
+  const [connection, setConnection] = React.useState(true);
 
   return (
     <BrowserRouter>

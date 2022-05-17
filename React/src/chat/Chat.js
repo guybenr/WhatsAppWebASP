@@ -13,7 +13,7 @@ import connection from "../openScreen/OpenScreen";
 function Chat(props) {
     const [messages, setMessages] = React.useState([]);
     const toSendMassage = React.createRef('');
-   
+
 
 
     useEffect(async () => {
@@ -24,7 +24,6 @@ function Chat(props) {
             },
         });
         setMessages(await messages.json());
-        console.log(messages);
     },[props.reRender, props.chatName]);
 
     //function returns all of the Massage Components that are in the database
@@ -43,7 +42,6 @@ function Chat(props) {
             return;
         event.preventDefault();
         let message = {from: props.currentUserId, to: props.contact.id, content: messageContent}
-        console.log(message);
         //post to the server
         await fetch("http://localhost:5028/api/contacts/" + message.to + "/messages", {
             method: 'POST',
@@ -64,6 +62,7 @@ function Chat(props) {
             body: JSON.stringify(message)
         });
         toSendMassage.current.value = "";
+        props.connection.invoke("Changed");
         props.setReRender(!props.reRender);
         // alarm the server that change happend
 

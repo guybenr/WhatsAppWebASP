@@ -8,16 +8,6 @@ import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 function OpenScreen(props) {
     const navigate = useNavigate();
     const [isInvalid, setIsInvalid] = React.useState(false);
-    const [connection, setConnection] = React.useState(false);
-
-
-    async function start() {
-        const connection = new HubConnectionBuilder().withUrl("http://localhost:5028/chatHub").configureLogging(LogLevel.Information).build();
-        await connection.start().then(() => {
-            console.log("Connection success.");
-            setConnection(connection);
-        })
-    }
 
 
     const handleClose = () => {
@@ -56,7 +46,6 @@ function OpenScreen(props) {
         userDetails = await userDetails.json();
         props.onSignIn(userDetails); //passing all of the user details to the chatScreen component
         props.setUserToken(token);   //passing the token to the chatScreen component
-        start();
         navigate('/Chat');
         
     }
