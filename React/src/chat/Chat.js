@@ -4,7 +4,6 @@ import React from "react";
 import { Modal } from "react-bootstrap";
 import { render } from "react-dom";
 import useRecorder from "./useRecorder";
-import UsersData from "../usersData/UsersData";
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import connection from "../openScreen/OpenScreen";
 
@@ -13,6 +12,7 @@ import connection from "../openScreen/OpenScreen";
 function Chat(props) {
     const [messages, setMessages] = React.useState([]);
     const toSendMassage = React.createRef('');
+    var ImageChat = "https://cdn-icons.flaticon.com/png/512/924/premium/924915.png?token=exp=1652728089~hmac=e7e756d9f3e40f26bd2bd3413f7a987c"
 
 
 
@@ -32,8 +32,6 @@ function Chat(props) {
             return <Massage content={message.content} isRecived={!message.sent} time={new Date(Date.parse(message.created))} type={"text"}/>
         return <></>
     }).reverse();
-
-    var ImageChat = "https://cdn-icons.flaticon.com/png/512/924/premium/924915.png?token=exp=1652728089~hmac=e7e756d9f3e40f26bd2bd3413f7a987c"
 
     //function handeling sending massage to a contact
     const sendMessage = async (event) => {
@@ -62,9 +60,8 @@ function Chat(props) {
             body: JSON.stringify(message)
         });
         toSendMassage.current.value = "";
-        props.connection.invoke("Changed");
+        props.connection.invoke("Changed", props.contact.id);   //notify the contact that changes accured
         props.setReRender(!props.reRender);
-        // alarm the server that change happend
 
     }
 
@@ -82,7 +79,7 @@ function Chat(props) {
             </div>
             <div className="chat-box">
                 <div className="toSend">
-                    <input onKeyPress={sendMessage} ref={toSendMassage} type="text" class="form-control textBox"></input>
+                    <input onKeyPress={sendMessage} ref={toSendMassage} type="text" className="form-control textBox"></input>
                     <span className="glyphicon glyphicon-search form-control-feedback"></span>
                 </div>
             </div>

@@ -5,9 +5,22 @@ namespace webAPI.NET.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task Changed()
+        public async Task Changed(string userId)
         {
-            await Clients.All.SendAsync("changes recived");
+            try
+            {
+                await Clients.Group(userId).SendAsync("changes recived");
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+        }
+
+        /* function creating a group based on the userId argument */
+        public async Task AddUser(string userId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, userId);
         }
     }
 }

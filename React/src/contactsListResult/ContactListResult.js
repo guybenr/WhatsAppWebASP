@@ -1,4 +1,3 @@
-import UsersData from "../usersData/UsersData";
 import ContactItem from "../contactItem/ContactItem";
 
 function ContactListResult(props) {

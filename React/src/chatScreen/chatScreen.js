@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorModal from "../errorModal/ErrorModal";
-import UsersData from "../usersData/UsersData";
 import { Modal, Button } from "react-bootstrap";
 import ContactItem from "../contactItem/ContactItem";
 import Search from "../search/Search";
@@ -14,17 +13,18 @@ function ChatScreen(props) {
     const contactUsername = React.createRef('');
     const contactNickName = React.createRef('');
     const contactServer = React.createRef('');
-    var image = "https://cdn-icons-png.flaticon.com/128/4333/4333609.png";
     const [toAddContact, setToAddContact] = React.useState(false);
     const [contactsSearch, setContactsSearch] = React.useState([]);
     const [contacts, setContacts] = React.useState([]); 
     const [showChat, setshowChat] = React.useState(false);
     const [detailsChat, setDetailsChat] = React.useState("");
     const [reRender, setReRender] = React.useState(false);
-    const [count, setCount] = React.useState(0);
     const [connection, setConnection] = React.useState(true);
+    var image = "https://cdn-icons-png.flaticon.com/128/4333/4333609.png";
+
 
     useEffect(async () => {
+        // gets all of the contact from the WebApi service
         let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
             method: 'GET',
             headers: {
@@ -34,16 +34,18 @@ function ChatScreen(props) {
         contactsResponse = (await contactsResponse.json());
         setContacts(contactsResponse);
         setContactsSearch(contactsResponse);
-        start();
-    },[count, toAddContact, reRender]);
+        startConnection();
+    },[toAddContact, reRender]);
 
-    async function start() {
+    //starting the connection with the webApi using signalR
+    async function startConnection() {
         const connection = new HubConnectionBuilder().withUrl("http://localhost:5028/chatHub").configureLogging(LogLevel.Information).build();
         await connection.start().then(() => {
             setConnection(connection);
             connection.on("changes recived", () => {
                 setReRender(!reRender);
             })
+            connection.invoke("AddUser", props.userLoginDetails.id);    //adding the user to the hub
         })
     }
 
@@ -97,9 +99,11 @@ function ChatScreen(props) {
         contactUsername.current.value = "";
         contactNickName.current.value = "";
         contactServer.current.value = "";
-        props.connection.invoke("Changed");
+        props.connection.invoke("Changed", newContact.id);  // notify the contact that changes had accured
         setToAddContact(false);
     }
+
+
 
     const doSearch = (query) => {
         setContactsSearch(contacts.filter((contact) => contact.name.includes(query)));
