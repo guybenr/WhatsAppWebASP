@@ -23,8 +23,7 @@ namespace webAPI.NET.Controllers
         }
 
 
-        // POST: api/Invitations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/invitations
         [HttpPost]
         public async Task<IActionResult> PostInvitation(Invitation invitation)
         {

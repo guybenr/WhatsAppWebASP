@@ -5,6 +5,7 @@ namespace webAPI.NET.Hubs
 {
     public class ChatHub : Hub
     {
+        /* function sends notify the user that changes has accured */
         public async Task Changed(string userId)
         {
             try

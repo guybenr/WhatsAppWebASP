@@ -54,6 +54,7 @@ namespace webAPI.NET.Controllers
             return BadRequest(new string("Username already taken"));
         }
 
+        /* function generates a JWT token based on the username and returns it */
         private string GenerateToken(string username)
         {
             var claims = new[]
@@ -73,6 +74,8 @@ namespace webAPI.NET.Controllers
                 signingCredentials: mac);
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        // POST: api/users/login
         [Route("login")]
         [HttpPost]
         public async Task<ActionResult> userLogin([FromBody] LoginInfo loginInfo)

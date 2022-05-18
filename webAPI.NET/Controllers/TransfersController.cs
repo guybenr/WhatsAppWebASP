@@ -24,8 +24,7 @@ namespace webAPI.NET.Controllers
         }
 
 
-        // POST: api/Transfers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        // POST: api/transfer
         [HttpPost]
         public async Task<ActionResult<Transfer>> PostTransfer([FromBody] Transfer transfer)
         {

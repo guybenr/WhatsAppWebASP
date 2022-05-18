@@ -27,7 +27,7 @@ namespace webAPI.NET.Controllers
 			_messageService = mService;
 
 		}
-
+		/* function return the userId based on the JWT token */
 		private string GetUserIdFromToken()
         {
 			var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -45,7 +45,8 @@ namespace webAPI.NET.Controllers
 
 
 
-		// GET: api/Contacts/5
+		// GET: api/Contacts/alice
+		[Authorize]
 		[HttpGet("{id}")]
 		public async Task<Contact> GetContact(string id)
 		{
@@ -59,8 +60,8 @@ namespace webAPI.NET.Controllers
 
 
 
-		// PUT: api/Contacts/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		// PUT: api/Contacts/alice
+		[Authorize]
 		[HttpPut("{id}")]
 		public async Task<IActionResult> PutContact(string id, UpdateContact updateContact)
 		{
@@ -85,7 +86,7 @@ namespace webAPI.NET.Controllers
 			return NoContent();
 		}
 
-		// DELETE: api/Contacts/5
+		// DELETE: api/Contacts/alice
 		[Authorize]
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteContact(string id)
@@ -110,12 +111,12 @@ namespace webAPI.NET.Controllers
 
 
 
-		// GET: api/Contacts/5
+		// GET: api/Contacts/alice/messages/5
 		[Authorize]
-		[HttpGet("{id1}/messages/{id}")]
-		public async Task<Message> GetMessage(string id1, int id)
+		[HttpGet("{contactId}/messages/{messageId}")]
+		public async Task<Message> GetMessage(string contactId, int messageId)
 		{
-			var message = await _messageService.Get(GetUserIdFromToken(), id1, id);
+			var message = await _messageService.Get(GetUserIdFromToken(), contactId, messageId);
 			if (message == null)
 			{
 				return null;
@@ -125,13 +126,12 @@ namespace webAPI.NET.Controllers
 
 
 
-		// PUT: api/Contacts/5
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		// PUT: api/Contacts/alice/messages/5
 		[Authorize]
-		[HttpPut("{id1}/messages/{id}")]
-		public async Task<IActionResult> PutMessage(string id1, int id, NewUpdateMessage message)
+		[HttpPut("{contactId}/messages/{messageId}")]
+		public async Task<IActionResult> PutMessage(string contactId, int messageId, NewUpdateMessage message)
 		{
-			var isUpdate = await _messageService.Put(GetUserIdFromToken(), id1, id, message.Content);
+			var isUpdate = await _messageService.Put(GetUserIdFromToken(), contactId, messageId, message.Content);
 			if (!isUpdate)
 			{
 				return BadRequest();
@@ -157,12 +157,12 @@ namespace webAPI.NET.Controllers
 
 
 
-        // DELETE: api/Contacts/5
+        // DELETE: api/Contacts/alice/messages/5
 		[Authorize]
-        [HttpDelete("{id1}/messages/{id}")]
-		public async Task<IActionResult> DeleteMessage(string id1, int id)
+        [HttpDelete("{contactId}/messages/{messageId}")]
+		public async Task<IActionResult> DeleteMessage(string contactId, int messageId)
 		{
-			var isDelete = await _messageService.Delete(GetUserIdFromToken(), id1, id);
+			var isDelete = await _messageService.Delete(GetUserIdFromToken(), contactId, messageId);
 			if (!isDelete)
 			{
 				return NotFound();
