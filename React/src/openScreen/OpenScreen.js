@@ -69,6 +69,9 @@ function OpenScreen(props) {
                             <Link to='/Register'>Click here</Link>
                             <label>&nbsp;to register</label>
                         </div>
+                        <div className="mb-3">
+                            <a className="rate-link" href="http://localhost:5161/reviews/index">Rate Us</a>
+                        </div>
                         <div>
                             <button onClick={handleSubmit} type="submit" className="btn btn-primary">Log in</button>
                         </div>
