@@ -13,6 +13,7 @@ namespace webAPI.NET.Services
 			_context = context;
 		}
 
+		//check id user with username and password is exist in database
 		public async Task<User> IsExist(string username, string password)
         {
 			var isExist = await _context.User.FindAsync(username);
@@ -27,6 +28,7 @@ namespace webAPI.NET.Services
 			return isExist;
         }
 
+		//check id user with username is exist in database
 		private async Task<bool> IsUsernameTaken(string username)
 		{
 			var isExist = await _context.User.FindAsync(username);
@@ -37,11 +39,13 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
+		//return user with that username
 		public async Task<User> GetUser(string username)
 		{
 			return await _context.User.FindAsync(username);
 		}
 
+		//save new user to database
 		public async Task<bool> AddUser(User user)
         {
 			await _context.User.AddAsync(user);

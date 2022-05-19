@@ -69,13 +69,16 @@ function OpenScreen(props) {
                             <Link to='/Register'>Click here</Link>
                             <label>&nbsp;to register</label>
                         </div>
-                        <div className="mb-3">
-                            <a className="rate-link" href="http://localhost:5161/reviews/index">Rate Us</a>
-                        </div>
                         <div>
                             <button onClick={handleSubmit} type="submit" className="btn btn-primary">Log in</button>
                         </div>
                     </form>
+                    <div className="mb-3">
+                        <a href="http://localhost:5161/reviews/index" className="allRate">
+                            <img className="rate-link" src="https://azcdn.odyssey.pgsitecore.com/en-us/-/media/HerbalEssence/Images/Common%20Icons/RatingStars.png?v=1-201704181136"></img>
+                            <h1 className="rate">Rate Us</h1>
+                        </a>
+                    </div>
                 </div>
                 <ErrorModal handleShow={isInvalid} handleClose={handleClose} bodyMassage="Invalid username or password" closeButton="Close" />
             </div>

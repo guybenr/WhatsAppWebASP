@@ -39,6 +39,32 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.loginBtn {
+  position: relative;
+  top: 50px;
+}
+
+.allRate {
+  text-decoration-color: #000;
+}
+
+.rate {
+  position: relative;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: 200;
+  top: 40px;
+  left: 195px;
+}
+
+.rate-link {
+  position: relative;
+  height: 22px;
+  width: 130px;
+  top: 30px;
+  left: 160px;
+}
+
 .form-label {
   padding-top: 2px;
 }
