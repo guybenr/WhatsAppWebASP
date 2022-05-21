@@ -99,7 +99,7 @@ function ChatScreen(props) {
         contactUsername.current.value = "";
         contactNickName.current.value = "";
         contactServer.current.value = "";
-        props.connection.invoke("Changed", newContact.id);  // notify the contact that changes had accured
+        connection.invoke("Changed", newContact.id);  // notify the contact that changes had accured
         setToAddContact(false);
     }
 
