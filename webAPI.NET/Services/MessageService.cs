@@ -15,7 +15,7 @@ namespace webAPI.NET.Services
 			_chatService = new ChatService(context);
 		}
 
-
+		//return all messages between person with userId to persom with id
 		public async Task<List<Message>> GetAll(string userId, string id)
 		{
 			var chat = await _chatService.Get(userId, id);
@@ -27,7 +27,7 @@ namespace webAPI.NET.Services
 			return messages.ToList();
 		}
 
-
+		//return specific message with id2 between person with userId to persom with id
 		public async Task<Message> Get(string id, string id1, int id2)
 		{
 			var messages = await GetAll( id, id1);
@@ -41,7 +41,7 @@ namespace webAPI.NET.Services
 		}
 
 
-
+		//create new message between person with userId to persom with id
 		public async Task<bool> Post(string senderId, string reciverId, Message message)
 		{
 			if (!await _chatService.addMessage(senderId,reciverId,message))
@@ -67,6 +67,7 @@ namespace webAPI.NET.Services
 		}
 
 
+		//change content message between person with userId to persom with id
 		public async Task<bool> Put(string userId, string id1, int id, string content)
 		{
 			var message = await Get(userId, id1, id);
@@ -96,6 +97,8 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
+
+		//delete message between person with userId to persom with id
 		public async Task<bool> Delete(string userId, string id1, int id)
 		{
 			Message message = await Get(userId,id1,id);
@@ -110,7 +113,7 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
-
+		//check if message with id is exist
 		public bool MessageExists(int id)
 		{
 			return _context.Message.Any(e => e.Id == id);

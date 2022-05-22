@@ -28,7 +28,7 @@ namespace webAPI.NET.Controllers
             return await _context.Chat.ToListAsync();
         }
 
-        // GET: api/Chats/5
+        // GET: api/Chats/5 - function return the chat with content that his id = "{id}"
         [HttpGet("{id}")]
         public async Task<ActionResult<Chat>> GetChat(int id)
         {
@@ -42,7 +42,7 @@ namespace webAPI.NET.Controllers
             return chat;
         }
 
-        // PUT: api/Chats/5
+        // PUT: api/Chats/5 - function update the chat with content that his id = "{id}"
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutChat(int id, Chat chat)
@@ -73,7 +73,7 @@ namespace webAPI.NET.Controllers
             return NoContent();
         }
 
-        // POST: api/Chats
+        // POST: api/Chats - function create new chat with content that his id = "{id}"
         [HttpPost]
         public async Task<ActionResult<Chat>> PostChat(Chat chat)
         {
@@ -83,7 +83,7 @@ namespace webAPI.NET.Controllers
             return CreatedAtAction("GetChat", new { id = chat.Id }, chat);
         }
 
-        // DELETE: api/Chats/5
+        // DELETE: api/Chats/5 - function remove the chat with content that his id = "{id}"
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteChat(int id)
         {

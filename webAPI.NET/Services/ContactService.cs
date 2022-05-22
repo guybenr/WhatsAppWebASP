@@ -16,12 +16,13 @@ namespace webAPI.NET.Services
 			_chatService = new ChatService(context);
 		}
 
-
+		//return all contacts of person with userId
 		public async Task<List<Contact>> GetAll(string userId)
 		{
 			return await _context.Contact.Where(x => x.UserId == userId).ToListAsync();
 		}
 
+		//return contact with id of person with userId
 		public async Task<Contact> Get(string userId, string id)
 		{
 			var contacts = await _context.Contact.Where(x => x.UserId == userId).ToListAsync();
@@ -35,6 +36,8 @@ namespace webAPI.NET.Services
 			return contact;
 		}
 
+
+		//create new contact with id and other details of person with userId
 		public async Task<bool> Post(string userId, string id, string name, string server)
 		{
 			Contact contact = new Contact(id, name, server, "", DateTime.Now, userId);
@@ -62,6 +65,7 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
+		//change name contact with id of person with userId
 		public async Task<bool> Put(string userId, string id, string name, string server)
 		{
 			var contact = await Get(userId, id);
@@ -91,6 +95,7 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
+		//delete contact with id of person with userId
 		public async Task<bool> Delete(string userId, string id)
 		{
 			var contact = await _context.Contact.Where<Contact>(c => c.UserId == userId && c.Id == id).FirstOrDefaultAsync();   //FindAsync(id);
@@ -105,7 +110,7 @@ namespace webAPI.NET.Services
 			return true;
 		}
 
-
+		//check if contact with id is exist
 		public bool ContactExists(string id)
 		{
 			return _context.Contact.Any(e => e.Name == id);
