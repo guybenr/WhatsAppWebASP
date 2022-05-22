@@ -74,7 +74,7 @@ function OpenScreen(props) {
                         </div>
                     </form>
                     <div className="mb-3">
-                        <a href="http://localhost:3000/reviews/index" className="allRate">
+                        <a href="http://localhost:5161/reviews/index" className="allRate">
                             <img className="rate-link" src="https://azcdn.odyssey.pgsitecore.com/en-us/-/media/HerbalEssence/Images/Common%20Icons/RatingStars.png?v=1-201704181136"></img>
                             <h1 className="rate">Rate Us</h1>
                         </a>
