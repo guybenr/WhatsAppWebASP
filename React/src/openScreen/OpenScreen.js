@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Modal, Button } from "react-bootstrap";
 import ErrorModal from "../errorModal/ErrorModal";
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { WebAPIServer, ReactServer, MVCServer } from "../Resources/resources"
 
 function OpenScreen(props) {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ function OpenScreen(props) {
         var username = document.getElementById('username').value;
         var password = document.getElementById('exampleInputPassword1').value;
         let loginDetails = { Username: username, Password: password };
-        let token = await fetch("http://localhost:5028/api/users/login", {
+        let token = await fetch("http://" + WebAPIServer + "/api/users/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +36,7 @@ function OpenScreen(props) {
             return;
         }
 
-        let userDetails = await fetch("http://localhost:5028/api/users", {
+        let userDetails = await fetch("http://" + WebAPIServer + "/api/users", {
             method: 'GET',
             headers: {
                 "Accept":"application/json",
@@ -74,7 +75,7 @@ function OpenScreen(props) {
                         </div>
                     </form>
                     <div className="mb-3">
-                        <a href="http://localhost:5161/reviews/index" className="allRate">
+                        <a href={"http://" + MVCServer + "/reviews/index"} className="allRate">
                             <img className="rate-link" src="https://azcdn.odyssey.pgsitecore.com/en-us/-/media/HerbalEssence/Images/Common%20Icons/RatingStars.png?v=1-201704181136"></img>
                             <h1 className="rate">Rate Us</h1>
                         </a>

@@ -6,7 +6,7 @@ import { render } from "react-dom";
 import useRecorder from "./useRecorder";
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 import connection from "../openScreen/OpenScreen";
-
+import { WebAPIServer, ReactServer, MVCServer } from "../Resources/resources"
 
 
 function Chat(props) {
@@ -17,7 +17,7 @@ function Chat(props) {
 
 
     useEffect(async () => {
-        let messages = await fetch("http://localhost:5028/api/contacts/" + props.contact.id + "/messages/", {
+        let messages = await fetch("http://" + WebAPIServer + "/api/contacts/" + props.contact.id + "/messages/", {
             method: 'GET',
             headers: {
                 "Authorization": "Bearer " + props.userToken
@@ -41,7 +41,7 @@ function Chat(props) {
         event.preventDefault();
         let message = {from: props.currentUserId, to: props.contact.id, content: messageContent}
         //post to the server
-        await fetch("http://localhost:5028/api/contacts/" + message.to + "/messages", {
+        await fetch("http://" + WebAPIServer + "/api/contacts/" + message.to + "/messages", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

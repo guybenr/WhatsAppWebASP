@@ -7,6 +7,7 @@ import Search from "../search/Search";
 import Chat from "../chat/Chat";
 import ContactListResult from "../contactsListResult/ContactListResult";
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import { WebAPIServer, ReactServer, MVCServer } from "../Resources/resources"
 
 function ChatScreen(props) {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ function ChatScreen(props) {
 
     useEffect(async () => {
         // gets all of the contact from the WebApi service
-        let contactsResponse = await fetch("http://localhost:5028/api/contacts", {
+        let contactsResponse = await fetch("http://" + WebAPIServer + "/api/contacts", {
             method: 'GET',
             headers: {
                 "Authorization": "Bearer " + props.userToken
@@ -39,7 +40,7 @@ function ChatScreen(props) {
 
     //starting the connection with the webApi using signalR
     async function startConnection() {
-        const connection = new HubConnectionBuilder().withUrl("http://localhost:5028/chatHub").configureLogging(LogLevel.Information).build();
+        const connection = new HubConnectionBuilder().withUrl("http://" + WebAPIServer + "/chatHub").configureLogging(LogLevel.Information).build();
         await connection.start().then(() => {
             setConnection(connection);
             connection.on("changes recived", () => {
@@ -65,7 +66,7 @@ function ChatScreen(props) {
         }
         let userName = props.userLoginDetails.id;
             //if the user tries to add himself
-        if (contactUsername.current.value === userName && contactServer.current.value === "localhost:5028") {
+        if (contactUsername.current.value === userName && contactServer.current.value === WebAPIServer) {
             alert("Contact can't add himself");
             return;
         // if the contact already added to the user contacts
@@ -82,12 +83,13 @@ function ChatScreen(props) {
             },
             body: JSON.stringify(invitation)
         });
-        if(result.status !== 204) {
+        // if the response status isn't 2XX then invalid details
+        if(Math.floor(result.status / 100) !== 2) {
             alert("Invalid Details");
             return;
         }
         let newContact = {id: contactUsername.current.value, name: contactNickName.current.value, server: contactServer.current.value };
-        result = await fetch("http://localhost:5028/api/contacts/", {
+        result = await fetch("http://" + WebAPIServer + "/api/contacts/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

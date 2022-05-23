@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ErrorModal from "../errorModal/ErrorModal";
+import { WebAPIServer, ReactServer, MVCServer } from "../Resources/resources"
 
 
 
@@ -63,7 +64,7 @@ function RegisterScreen(props) {
         }
         // adds the user to the users database
         let user = {id: userName, name: nickName, password: password, image: ""};
-        let token = await fetch("http://localhost:5028/api/users/register", {
+        let token = await fetch("http://" + WebAPIServer + "/api/users/register", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
