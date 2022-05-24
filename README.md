@@ -22,13 +22,13 @@ This project will run on localhost:3000.
 
 ### MVC
 
-The MVC project responsile on reviewing the web app. Each clinet can review our WhatsApp Web by giving it a 1-5 grade and a description.
+The MVC project responsible on reviewing the app. Each clinet can review WhatsApp Web by giving it a 1-5 grade and a description.
 
 This project will run on localhost:5161.
 
 ### WEB-API.NET
 
-This is the web service, based on WEB-API .NET. and communicate with a localDB. Http queries can be sent and be responded by the service.
+This is the web service, based on WEB-API .NET and localDB. Http queries can be sent and be responded by the service.
 
 Thechnologies:
 
