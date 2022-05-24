@@ -28,12 +28,7 @@ namespace webAPI.NET.Controllers
         public async Task<IActionResult> PostInvitation(Invitation invitation)
         {
             var isInvitation = await _service.Post(invitation.To, invitation.From, invitation.From, invitation.Server);
-            HttpContext.Response.StatusCode = 201;
-            if (!isInvitation)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            return StatusCode(201);
         }
     }
 }
