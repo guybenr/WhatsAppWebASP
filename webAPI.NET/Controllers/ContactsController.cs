@@ -40,6 +40,7 @@ namespace webAPI.NET.Controllers
 		[HttpGet]
 		public async Task<IEnumerable<Contact>> GetContact()
 		{
+			HttpContext.Response.StatusCode = 200;
 			return await _contactService.GetAll(GetUserIdFromToken());
 		}
 
@@ -53,8 +54,10 @@ namespace webAPI.NET.Controllers
 			var contact = await _contactService.Get(GetUserIdFromToken(), id);
 			if (contact == null)
 			{
+				HttpContext.Response.StatusCode = 404;
 				return null;
 			}
+			HttpContext.Response.StatusCode = 200;
 			return contact;
 		}
 
@@ -66,6 +69,7 @@ namespace webAPI.NET.Controllers
 		public async Task<IActionResult> PutContact(string id, UpdateContact updateContact)
 		{
 			var isUpdate = await _contactService.Put(GetUserIdFromToken(), id, updateContact.Name, updateContact.Server);
+			HttpContext.Response.StatusCode = 204;
 			if (!isUpdate)
 			{
 				return BadRequest();
@@ -79,6 +83,7 @@ namespace webAPI.NET.Controllers
 		public async Task<IActionResult> PostNewContact(NewContact newContact)
 		{
 			var isInvitation = await _contactService.Post(GetUserIdFromToken(), newContact.Id, newContact.Name, newContact.Server);
+			HttpContext.Response.StatusCode = 201;
 			if (!isInvitation)
 			{
 				return NotFound();
@@ -92,6 +97,7 @@ namespace webAPI.NET.Controllers
 		public async Task<IActionResult> DeleteContact(string id)
 		{
 			var isDelete = await _contactService.Delete(GetUserIdFromToken(), id);
+			HttpContext.Response.StatusCode = 204;
 			if (!isDelete)
 			{
 				return NotFound();
@@ -106,6 +112,7 @@ namespace webAPI.NET.Controllers
 		public async Task<IEnumerable<Message>> GetMessage(string id)
 		{
 			var x = await _messageService.GetAll(GetUserIdFromToken(), id);
+			HttpContext.Response.StatusCode = 200;
 			return x;
 		}
 
@@ -117,6 +124,7 @@ namespace webAPI.NET.Controllers
 		public async Task<Message> GetMessage(string contactId, int messageId)
 		{
 			var message = await _messageService.Get(GetUserIdFromToken(), contactId, messageId);
+			HttpContext.Response.StatusCode = 200;
 			if (message == null)
 			{
 				return null;
@@ -148,7 +156,8 @@ namespace webAPI.NET.Controllers
         {
 			Message msg = new Message(message.Content, DateTime.Now, true);
             var isAdd = await _messageService.Post(GetUserIdFromToken(), id, msg);
-            if (!isAdd)
+			HttpContext.Response.StatusCode = 201;
+			if (!isAdd)
             {
                 return BadRequest();
             }
@@ -163,6 +172,7 @@ namespace webAPI.NET.Controllers
 		public async Task<IActionResult> DeleteMessage(string contactId, int messageId)
 		{
 			var isDelete = await _messageService.Delete(GetUserIdFromToken(), contactId, messageId);
+			HttpContext.Response.StatusCode = 204;
 			if (!isDelete)
 			{
 				return NotFound();
