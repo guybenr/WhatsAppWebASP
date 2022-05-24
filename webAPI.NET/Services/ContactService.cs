@@ -7,13 +7,16 @@ namespace webAPI.NET.Services
 {
 	public class ContactService: IContactService
 	{
+		public static readonly string ServerUrl = "localhost:5028";
 		private readonly Context _context;
 		private readonly IChatService _chatService;
+		private readonly IUserService _userService;
 
 		public ContactService (Context context)
 		{
 			_context = context;
 			_chatService = new ChatService(context);
+			_userService = new UserService(context);
 		}
 
 		//return all contacts of person with userId
@@ -40,6 +43,11 @@ namespace webAPI.NET.Services
 		//create new contact with id and other details of person with userId
 		public async Task<bool> Post(string userId, string id, string name, string server)
 		{
+			// if the contact's server is this current server then checks that there is a user with the same id
+			if(server == ServerUrl && await _userService.GetUser(id) == null)
+            {
+				return false;
+            }
 			Contact contact = new Contact(id, name, server, "", DateTime.Now, userId);
 			_context.Contact.Add(contact);
 			try

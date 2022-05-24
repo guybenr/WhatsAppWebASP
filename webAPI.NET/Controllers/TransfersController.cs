@@ -30,6 +30,10 @@ namespace webAPI.NET.Controllers
         {
             Message message = new Message(transfer.Content, DateTime.Now, false);
             var isTransfer = await _service.Post(transfer.To, transfer.From, message);
+            if(!isTransfer)
+            {
+                return BadRequest();
+            }
             return StatusCode(201);
         }
 

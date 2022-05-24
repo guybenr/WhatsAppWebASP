@@ -74,8 +74,8 @@ function ChatScreen(props) {
             alert("Contact already added");
             return;
         }
-        let invitation = {from: userName, to: contactUsername.current.value, server: contactServer.current.value };
-        let result = await fetch("http://"+ invitation.server + "/api/invitations/", {
+        let invitation = {from: userName, to: contactUsername.current.value, server: WebAPIServer };
+        let result = await fetch("http://"+ contactServer.current.value + "/api/invitations/", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,8 @@ function ChatScreen(props) {
             body: JSON.stringify(invitation)
         });
         // if the response status isn't 2XX then invalid details
-        if(Math.floor(result.status / 100) !== 2) {
+        console.log(result.status);
+        if(result.status !== 201) {
             alert("Invalid Details");
             return;
         }

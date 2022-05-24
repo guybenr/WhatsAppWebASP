@@ -28,6 +28,10 @@ namespace webAPI.NET.Controllers
         public async Task<IActionResult> PostInvitation(Invitation invitation)
         {
             var isInvitation = await _service.Post(invitation.To, invitation.From, invitation.From, invitation.Server);
+            if(!isInvitation)
+            {
+                return NotFound();
+            }
             return StatusCode(201);
         }
     }
